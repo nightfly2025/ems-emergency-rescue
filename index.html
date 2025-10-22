@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet ER Emergency - Animal Rescue Hospital</title>
+    <title>Animal ER - Human Emergency Training</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
             min-height: 100vh;
             color: #333;
@@ -166,6 +166,12 @@
             font-size: 1rem;
             text-align: center;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .tool-description {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            text-align: center;
         }
 
         .sidebar {
@@ -325,34 +331,28 @@
         .wiggle {
             animation: wiggle 0.5s ease-in-out;
         }
-
-        .animal-doctor {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
     <!-- GATE SCREEN -->
     <div id="gateScreen" class="gate-screen">
         <div class="gate-content">
-            <div class="animal-doctor">🐱‍⚕️</div>
-            <h1 style="font-size: 3rem; color: #ff6b6b; margin-bottom: 10px;">PET ER EMERGENCY</h1>
+            <h1 style="font-size: 3rem; color: #ff6b6b; margin-bottom: 10px;">ANIMAL ER</h1>
             <div style="font-size: 2rem; margin: 20px; color: #4ecdc4;">🔒 FOLLOW TO PLAY</div>
             
             <h2 style="color: #555;">Step 1: Follow Our Channels</h2>
-            <p style="color: #666; font-size: 1.2rem;">Join our animal rescue community to access this PURRR-fect medical simulator!</p>
+            <p style="color: #666; font-size: 1.2rem;">Learn human emergency medicine with cute animal faces!</p>
             
             <div class="social-proof">
                 <div class="social-channel">
                     <div style="font-size: 2.5rem;">🎥</div>
                     <strong>Rumble</strong>
-                    <div style="font-size: 1rem;">Pet ER Games</div>
+                    <div style="font-size: 1rem;">Animal ER Games</div>
                 </div>
                 <div class="social-channel">
                     <div style="font-size: 2.5rem;">📱</div>
                     <strong>YouTube</strong>
-                    <div style="font-size: 1rem;">Pet ER Emergency</div>
+                    <div style="font-size: 1rem;">Animal ER Training</div>
                 </div>
             </div>
 
@@ -361,7 +361,7 @@
                 ✅ Subscribe to our Rumble channel<br>
                 ✅ Like the game video<br>
                 ✅ Stay subscribed for updates<br>
-                ✅ Share with animal lovers!
+                ✅ Learn real emergency medicine!
             </div>
             
             <button class="verify-btn" onclick="verifySubscription()">
@@ -373,7 +373,7 @@
             </p>
 
             <div style="margin-top: 20px; font-size: 0.9rem; color: #888;">
-                Pawsome gaming experience awaits! 🐶🐱
+                Learn to save lives with cute animals! 🚑
             </div>
         </div>
     </div>
@@ -382,8 +382,8 @@
     <div id="gameContainer" class="hidden">
         <div class="container">
             <header class="header">
-                <h1 class="game-title">🐾 PET ER EMERGENCY 🐾</h1>
-                <div class="clinic-name">ANIMAL RESCUE HOSPITAL</div>
+                <h1 class="game-title">🐾 ANIMAL ER 🐾</h1>
+                <div class="clinic-name">HUMAN EMERGENCY TRAINING</div>
                 
                 <div class="game-stats">
                     <div class="stat-box">
@@ -402,15 +402,15 @@
                 <div class="main-game">
                     <div class="patient-area" id="patientArea">
                         <div class="patient-emoji">😿</div>
-                        <div class="emergency-name" id="emergencyName">READY FOR RESCUE!</div>
-                        <div class="emergency-symptom" id="emergencySymptom">Click START to begin your first animal rescue mission!</div>
+                        <div class="emergency-name" id="emergencyName">READY FOR EMERGENCY!</div>
+                        <div class="emergency-symptom" id="emergencySymptom">Click START to begin your first emergency training!</div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="progressFill"></div>
                         </div>
                     </div>
 
                     <div class="game-message" id="gameMessage">
-                        Welcome to Pet ER Emergency! 🐶❤️
+                        Welcome to Animal ER! Learn to save lives! 🚑
                     </div>
 
                     <div class="tools-grid" id="toolsArea">
@@ -431,27 +431,27 @@
                         box-shadow: 0 8px 25px rgba(255,107,107,0.3);
                         border: 4px solid white;
                     ">
-                        🚨 START RESCUE MISSION!
+                        🚨 START EMERGENCY TRAINING!
                     </button>
                 </div>
 
                 <div class="sidebar">
-                    <h3 style="color: #ff6b6b; text-align: center; margin-bottom: 20px;">📚 PET CARE TIPS</h3>
+                    <h3 style="color: #ff6b6b; text-align: center; margin-bottom: 20px;">📚 EMERGENCY MEDICINE</h3>
                     
                     <div class="educational-tip">
                         <strong>💡 Did You Know?</strong>
-                        <p id="educationalTip">Cats purr not just when happy, but also when stressed or injured - it's a self-healing mechanism!</p>
+                        <p id="educationalTip">Immediate CPR can double or triple survival rates after cardiac arrest!</p>
                     </div>
 
                     <div class="educational-tip">
                         <strong>🎯 Today's Goal</strong>
-                        <p>Save 10 animals with 80% accuracy to unlock special treatments!</p>
+                        <p>Save 10 patients with 80% accuracy to unlock advanced procedures!</p>
                     </div>
 
                     <div class="educational-tip">
                         <strong>🏆 Leaderboard</strong>
                         <p>Your Best: <span id="highScore">0</span> points</p>
-                        <p>Animals Saved: <span id="totalSaved">0</span></p>
+                        <p>Patients Saved: <span id="totalSaved">0</span></p>
                     </div>
 
                     <div style="margin-top: 20px; text-align: center;">
@@ -471,112 +471,169 @@
             </div>
 
             <footer class="footer">
-                <div>© 2024 Pet ER Emergency - All Rights Reserved</div>
-                <div>Adorable Animal Rescue Simulator - Made with ❤️ for animal lovers!</div>
+                <div>© 2024 Animal ER - All Rights Reserved</div>
+                <div>Human Emergency Medicine Training with Cute Animals</div>
                 <div style="margin-top: 10px; font-size: 0.9rem; opacity: 0.7;">
-                    Follow our channel for more furry adventures! 🐶🐱🐰
+                    Follow our channel for more medical training! 🚑
                 </div>
             </footer>
         </div>
     </div>
 
     <script>
-        // ==================== GAME DATA - ANIMAL VERSION ====================
+        // ==================== GAME DATA - HUMAN EMERGENCIES + ANIMAL FACES ====================
         const emergencies = [
             {
-                name: "KITTY CARDIAC",
-                symptom: "😿 Fluffy not purring, weak meows, lying still",
-                correctTool: "defurrillator",
-                tools: ["defurrillator", "bandage", "treats", "oxygen_mask"],
-                educational: "Cats hide pain well - purring can be a self-healing mechanism!"
+                name: "HEART ATTACK",
+                symptom: "😿 Chest pain, difficulty breathing, pale skin",
+                correctTool: "defibrillator",
+                tools: ["defibrillator", "oxygen_mask", "aspirin", "iv_fluids"],
+                educational: "CPR within 3-5 minutes increases survival rate by 70%"
             },
             {
-                name: "PUPPY TRAUMA", 
-                symptom: "🐶 Limping, whining, won't wag tail - paw injury",
-                correctTool: "bandage",
-                tools: ["bandage", "defurrillator", "treats", "stethoscope"],
-                educational: "Dogs are very expressive - tail position and ear movement show pain levels"
-            },
-            {
-                name: "BUNNY BREATHING",
-                symptom: "🐰 Fast breathing, nose not wiggling, ears drooping",
+                name: "STROKE", 
+                symptom: "🐶 Facial droop, slurred speech, arm weakness",
                 correctTool: "oxygen_mask",
-                tools: ["oxygen_mask", "bandage", "carrot_juice", "treats"],
-                educational: "Rabbits breathe 30-60 times per minute when calm - faster means stress!"
+                tools: ["oxygen_mask", "iv_fluids", "blood_thinner", "ct_scan"],
+                educational: "Remember FAST: Face drooping, Arm weakness, Speech difficulty, Time to call emergency"
             },
             {
-                name: "HAMSTER WHEEL",
-                symptom: "🐹 Stuck in wheel, can't get out, squeaking loudly",
-                correctTool: "wheel_rescue",
-                tools: ["wheel_rescue", "bandage", "treats", "defurrillator"],
-                educational: "Hamsters can run up to 5 miles per night on their wheels!"
+                name: "SEVERE BLEEDING",
+                symptom: "🐰 Massive bleeding from wound, dizziness, pale skin",
+                correctTool: "tourniquet",
+                tools: ["tourniquet", "bandage", "iv_fluids", "pain_reliever"],
+                educational: "Tourniquets should be placed 2-3 inches above the wound"
             },
             {
-                name: "PARROT FEVER",
-                symptom: "🦜 Not talking, feathers puffed, sitting quietly",
-                correctTool: "feather_tonic",
-                tools: ["feather_tonic", "treats", "bandage", "oxygen_mask"],
-                educational: "Parrots can live 50+ years and mimic human speech perfectly!"
+                name: "ALLERGIC REACTION",
+                symptom: "🐹 Difficulty breathing, facial swelling, hives",
+                correctTool: "epipen",
+                tools: ["epipen", "antihistamine", "oxygen_mask", "steroids"],
+                educational: "Epinephrine must be administered immediately for anaphylactic reactions"
             },
             {
-                name: "GOLDFISH FLOATING",
-                symptom: "🐠 Floating sideways, not swimming, fins drooping",
-                correctTool: "water_cleaner",
-                tools: ["water_cleaner", "treats", "bandage", "oxygen_mask"],
-                educational: "Goldfish have memories lasting months, not seconds as commonly believed!"
+                name: "DIABETIC EMERGENCY",
+                symptom: "🐨 Confusion, sweating, tremors, loss of consciousness",
+                correctTool: "glucose_gel",
+                tools: ["glucose_gel", "insulin", "iv_fluids", "blood_test"],
+                educational: "Low blood sugar can cause seizures and coma"
             },
             {
-                name: "TURTLE SHELL",
-                symptom: "🐢 Cracked shell, not moving, head tucked in",
-                correctTool: "shell_repair",
-                tools: ["shell_repair", "bandage", "treats", "water_cleaner"],
-                educational: "Turtles can live over 100 years - some species outlive their owners!"
+                name: "ASTHMA ATTACK",
+                symptom: "🐭 Wheezing, shortness of breath, chest tightness",
+                correctTool: "inhaler",
+                tools: ["inhaler", "oxygen_mask", "steroids", "nebulizer"],
+                educational: "Asthma affects 1 in 13 people - inhalers provide immediate relief"
             },
             {
-                name: "GUINEA PIG CHILL",
-                symptom: "🐭 Shivering, not eating veggies, hiding constantly",
+                name: "SEIZURE",
+                symptom: "🦔 Uncontrolled shaking, loss of consciousness, confusion",
+                correctTool: "recovery_position",
+                tools: ["recovery_position", "oxygen_mask", "iv_fluids", "medication"],
+                educational: "Never put anything in mouth during seizure - place in recovery position after"
+            },
+            {
+                name: "BURN INJURY",
+                symptom: "🐢 Red, blistered skin, severe pain, swelling",
+                correctTool: "cool_burn",
+                tools: ["cool_burn", "bandage", "pain_reliever", "iv_fluids"],
+                educational: "Cool burns with running water for 10-20 minutes, never ice"
+            },
+            {
+                name: "OVERDOSE",
+                symptom: "🐍 Slow breathing, pinpoint pupils, unconsciousness",
+                correctTool: "naloxone",
+                tools: ["naloxone", "oxygen_mask", "iv_fluids", "activated_charcoal"],
+                educational: "Naloxone can reverse opioid overdose within 2-3 minutes"
+            },
+            {
+                name: "HYPOTHERMIA",
+                symptom: "🐧 Shivering, confusion, slow pulse, pale skin",
                 correctTool: "warm_blanket",
-                tools: ["warm_blanket", "treats", "bandage", "carrot_juice"],
-                educational: "Guinea pigs make over 10 different sounds to communicate!"
-            },
-            {
-                name: "CHINCHILLA DUST",
-                symptom: "🐭 Not dust bathing, fur matted, sneezing fits",
-                correctTool: "dust_bath",
-                tools: ["dust_bath", "treats", "bandage", "warm_blanket"],
-                educational: "Chinchillas take dust baths to clean their incredibly dense fur!"
-            },
-            {
-                name: "HEDGEHOG BALL",
-                symptom: "🦔 Curled in ball for hours, not unrolling, quills drooping",
-                correctTool: "hedgehog_unroller",
-                tools: ["hedgehog_unroller", "treats", "bandage", "warm_blanket"],
-                educational: "Hedgehogs have 5000-7000 quills that they can't shoot!"
+                tools: ["warm_blanket", "warm_fluids", "oxygen_mask", "iv_fluids"],
+                educational: "Warm hypothermia patients gradually - rapid warming can cause dangerous heart rhythms"
             }
         ];
 
         const toolsData = {
-            defurrillator: { name: "Defurrillator", emoji: "⚡" },
-            bandage: { name: "Cute Bandage", emoji: "🩹" },
-            treats: { name: "Magic Treats", emoji: "🍪" },
-            oxygen_mask: { name: "Oxygen Mask", emoji: "💨" },
-            stethoscope: { name: "Stethoscope", emoji: "🎧" },
-            wheel_rescue: { name: "Wheel Rescue Kit", emoji: "🔄" },
-            feather_tonic: { name: "Feather Tonic", emoji: "💧" },
-            water_cleaner: { name: "Water Cleaner", emoji: "🌊" },
-            shell_repair: { name: "Shell Repair", emoji: "🔧" },
-            warm_blanket: { name: "Warm Blanket", emoji: "🛏️" },
-            carrot_juice: { name: "Carrot Juice", emoji: "🥕" },
-            dust_bath: { name: "Dust Bath", emoji: "💨" },
-            hedgehog_unroller: { name: "Hedgehog Unroller", emoji: "🦔" }
+            defibrillator: { 
+                name: "Defibrillator", 
+                emoji: "⚡",
+                description: "Electric shock to restart heart"
+            },
+            oxygen_mask: { 
+                name: "Oxygen Mask", 
+                emoji: "💨",
+                description: "Provides oxygen for breathing"
+            },
+            tourniquet: { 
+                name: "Tourniquet", 
+                emoji: "🩹",
+                description: "Stops severe bleeding"
+            },
+            epipen: { 
+                name: "EpiPen", 
+                emoji: "💉",
+                description: "Epinephrine for allergic reactions"
+            },
+            glucose_gel: { 
+                name: "Glucose Gel", 
+                emoji: "🍯",
+                description: "Raises blood sugar quickly"
+            },
+            aspirin: { 
+                name: "Aspirin", 
+                emoji: "💊",
+                description: "Blood thinner for heart attacks"
+            },
+            inhaler: { 
+                name: "Inhaler", 
+                emoji: "🌬️",
+                description: "Bronchodilator for asthma"
+            },
+            recovery_position: { 
+                name: "Recovery Position", 
+                emoji: "🔄",
+                description: "Prevents choking after seizure"
+            },
+            cool_burn: { 
+                name: "Cool Water", 
+                emoji: "💧",
+                description: "Cools burns and reduces damage"
+            },
+            naloxone: { 
+                name: "Naloxone", 
+                emoji: "💊",
+                description: "Reverses opioid overdose"
+            },
+            warm_blanket: { 
+                name: "Warm Blanket", 
+                emoji: "🛏️",
+                description: "Raises body temperature"
+            },
+            blood_thinner: { 
+                name: "Blood Thinner", 
+                emoji: "💊",
+                description: "Prevents stroke complications"
+            },
+            antihistamine: { 
+                name: "Antihistamine", 
+                emoji: "💊",
+                description: "Reduces allergic symptoms"
+            },
+            iv_fluids: { 
+                name: "IV Fluids", 
+                emoji: "💧",
+                description: "Rehydrates and stabilizes"
+            }
         };
 
         const educationalTips = [
-            "Cats have 32 muscles in each ear - that's why they're so expressive!",
-            "Dogs can understand up to 250 words and gestures - smarter than toddlers!",
-            "Rabbits purr too! They grind their teeth softly when happy and relaxed",
-            "Hamsters store food in their cheek pouches that can expand to double their head size!",
-            "Parrots dance to music and have their own favorite songs!"
+            "Cardiac arrest survival decreases 10% every minute without CPR",
+            "Stroke is the leading cause of disability worldwide - FAST recognition saves brains",
+            "Severe bleeding can cause death in 3-5 minutes - immediate pressure saves lives",
+            "Anaphylaxis can be fatal within 15-30 minutes without epinephrine",
+            "Low blood sugar can cause permanent brain damage if untreated"
         ];
 
         // ==================== GAME STATE ====================
@@ -611,23 +668,23 @@
         // ==================== FOLLOW TO PLAY SYSTEM ====================
         function checkInitialVerification() {
             // IL GATE RESTA SEMPRE VISIBILE - NESSUNA VERIFICA AUTOMATICA
-            console.log("Pet ER Gate active - waiting for user verification");
+            console.log("Animal ER Gate active - waiting for user verification");
         }
 
         function verifySubscription() {
-            const userConfirmed = confirm("🐾 PET ER EMERGENCY - FOLLOW TO PLAY\n\n" +
+            const userConfirmed = confirm("🐾 ANIMAL ER - FOLLOW TO PLAY\n\n" +
                 "Please:\n" +
-                "1. Visit our Rumble channel: Pet ER Games\n" +
+                "1. Visit our Rumble channel: Animal ER Games\n" +
                 "2. Subscribe and like our videos\n" +
                 "3. Return here and click OK\n\n" +
-                "Your support helps us save more virtual animals! 🐶❤️");
+                "Learn real emergency medicine with cute animals! 🚑");
             
             if (userConfirmed) {
-                localStorage.setItem('petERVerified', 'true');
+                localStorage.setItem('animalERVerified', 'true');
                 unlockGame();
-                showMessage("🎉 Thank you for your support! Time to save some animals! 🐾", "success");
+                showMessage("🎉 Welcome to Animal ER! Learn to save lives! 🚑", "success");
             } else {
-                alert("Please subscribe to access this pawsome game! 🐱");
+                alert("Please subscribe to access this medical training game!");
             }
         }
 
@@ -643,8 +700,8 @@
 
         // ==================== GAME FUNCTIONS ====================
         function initGame() {
-            const savedHighScore = localStorage.getItem('petERHighScore');
-            const savedTotalSaved = localStorage.getItem('petERTotalSaved');
+            const savedHighScore = localStorage.getItem('animalERHighScore');
+            const savedTotalSaved = localStorage.getItem('animalERTotalSaved');
             
             if (savedHighScore) gameState.highScore = parseInt(savedHighScore);
             if (savedTotalSaved) gameState.totalSaved = parseInt(savedTotalSaved);
@@ -700,6 +757,7 @@
                 toolElement.innerHTML = `
                     <div class="tool-emoji">${tool.emoji}</div>
                     <div class="tool-name">${tool.name}</div>
+                    <div class="tool-description">${tool.description}</div>
                 `;
                 toolElement.onclick = () => useTool(toolId);
                 elements.toolsArea.appendChild(toolElement);
@@ -716,14 +774,14 @@
                 gameState.patientsSaved++;
                 gameState.totalSaved++;
                 
-                showMessage("✅ PAWSOME! Animal rescued and happy! 🐾", "success");
+                showMessage("✅ CORRECT! Patient stabilized! 🚑", "success");
                 elements.patientArea.classList.add('bounce');
                 
                 if (gameState.score > gameState.highScore) {
                     gameState.highScore = gameState.score;
-                    localStorage.setItem('petERHighScore', gameState.highScore);
+                    localStorage.setItem('animalERHighScore', gameState.highScore);
                 }
-                localStorage.setItem('petERTotalSaved', gameState.totalSaved);
+                localStorage.setItem('animalERTotalSaved', gameState.totalSaved);
                 
                 setTimeout(() => {
                     elements.patientArea.classList.remove('bounce');
@@ -732,7 +790,7 @@
                 
             } else {
                 gameState.timeLeft = Math.max(3, gameState.timeLeft - 5);
-                showMessage("❌ OOPS! Wrong treatment - animal still needs help! 😿", "error");
+                showMessage("❌ INCORRECT! Patient condition worsening!", "error");
                 elements.patientArea.classList.add('wiggle');
                 
                 setTimeout(() => {
@@ -752,7 +810,7 @@
                 
                 if (gameState.timeLeft <= 0) {
                     clearInterval(gameState.gameTimer);
-                    showMessage("⏰ TIME'S UP! Animal needs more help! 🐶", "error");
+                    showMessage("⏰ TIME'S UP! Emergency response failed!", "error");
                     
                     setTimeout(() => {
                         if (gameState.gameActive) {
@@ -803,10 +861,10 @@
             clearInterval(gameState.gameTimer);
             elements.startButton.style.display = 'block';
             
-            elements.emergencyName.textContent = 'READY FOR RESCUE!';
-            elements.emergencySymptom.textContent = 'Click START to begin your next animal rescue mission!';
+            elements.emergencyName.textContent = 'READY FOR EMERGENCY!';
+            elements.emergencySymptom.textContent = 'Click START to begin your next emergency training!';
             elements.toolsArea.innerHTML = '';
-            showMessage('Game reset. Ready for more furry adventures! 🐾', 'success');
+            showMessage('Game reset. Ready for more medical training! 🚑', 'success');
             
             gameState.score = 0;
             gameState.patientsSaved = 0;
