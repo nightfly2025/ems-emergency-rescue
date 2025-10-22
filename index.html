@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMS Emergency Rescue - Follow to Play</title>
+    <title>Pet ER Emergency - Animal Rescue Hospital</title>
     <style>
         * {
             margin: 0;
@@ -12,10 +12,10 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #dc143c 0%, #003366 100%);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
             min-height: 100vh;
-            color: white;
+            color: #333;
             overflow-x: hidden;
         }
 
@@ -28,30 +28,30 @@
         .header {
             text-align: center;
             padding: 20px 0;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
             margin-bottom: 30px;
-            backdrop-filter: blur(10px);
+            border: 5px dashed #ff6b6b;
         }
 
         .game-title {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
         }
 
-        .usa-flag {
-            font-size: 1.5rem;
-            margin: 0 10px;
-        }
-
-        .call-911 {
-            background: #dc143c;
-            padding: 8px 20px;
-            border-radius: 25px;
+        .clinic-name {
+            background: #4ecdc4;
+            padding: 10px 25px;
+            border-radius: 30px;
             display: inline-block;
             font-weight: bold;
             margin: 10px 0;
+            color: white;
+            font-size: 1.3rem;
         }
 
         .game-stats {
@@ -59,14 +59,15 @@
             justify-content: center;
             gap: 40px;
             margin: 20px 0;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
         .stat-box {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.8);
             padding: 15px 25px;
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            border: 3px solid #ffd93d;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .game-area {
@@ -84,32 +85,36 @@
 
         .patient-area {
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            min-height: 300px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-height: 350px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            border: 4px solid #6bcba9;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
         }
 
         .patient-emoji {
-            font-size: 4rem;
+            font-size: 6rem;
             margin-bottom: 20px;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
         }
 
         .emergency-name {
-            color: #dc143c;
-            font-size: 1.5rem;
+            color: #ff6b6b;
+            font-size: 2rem;
             margin: 10px 0;
             font-weight: bold;
         }
 
         .emergency-symptom {
-            color: #333;
-            font-size: 1.1rem;
+            color: #555;
+            font-size: 1.3rem;
             margin: 10px 0;
+            line-height: 1.5;
         }
 
         .tools-grid {
@@ -126,100 +131,111 @@
         }
 
         .tool {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: linear-gradient(135deg, #ffd93d, #ff9a3d);
             border: none;
-            border-radius: 12px;
+            border-radius: 20px;
             padding: 20px 10px;
             color: white;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
+            border: 3px solid white;
         }
 
         .tool:hover {
-            transform: translateY(-5px);
-            background: linear-gradient(135deg, #45a049, #4CAF50);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transform: translateY(-8px) scale(1.05);
+            background: linear-gradient(135deg, #ff9a3d, #ffd93d);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
         }
 
         .tool:active {
-            transform: translateY(0);
+            transform: translateY(-2px);
         }
 
         .tool-emoji {
-            font-size: 2rem;
+            font-size: 2.5rem;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
         }
 
         .tool-name {
-            font-size: 0.9rem;
+            font-size: 1rem;
             text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
         .sidebar {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
             padding: 20px;
-            backdrop-filter: blur(10px);
+            border: 4px solid #ff9a3d;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
         .educational-tip {
-            background: rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, #6bcba9, #4ecdc4);
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 15px;
             margin-bottom: 15px;
-            border-left: 4px solid #4CAF50;
+            color: white;
+            border: 3px solid white;
         }
 
         .progress-bar {
-            background: rgba(255,255,255,0.2);
-            height: 8px;
-            border-radius: 4px;
-            margin: 10px 0;
+            background: rgba(255,255,255,0.3);
+            height: 12px;
+            border-radius: 10px;
+            margin: 15px 0;
             overflow: hidden;
+            border: 2px solid white;
         }
 
         .progress-fill {
             height: 100%;
-            background: #4CAF50;
+            background: linear-gradient(90deg, #ff6b6b, #ff9a3d);
             width: 0%;
             transition: width 0.3s ease;
+            border-radius: 8px;
         }
 
         .game-message {
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             margin: 20px 0;
-            border-radius: 10px;
+            border-radius: 15px;
             font-weight: bold;
-            font-size: 1.1rem;
-            min-height: 50px;
+            font-size: 1.3rem;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 3px dashed;
         }
 
         .message-success {
-            background: rgba(76, 175, 80, 0.2);
-            border: 2px solid #4CAF50;
+            background: rgba(107, 203, 169, 0.2);
+            border-color: #6bcba9;
+            color: #2d7a5c;
         }
 
         .message-error {
-            background: rgba(244, 67, 54, 0.2);
-            border: 2px solid #f44336;
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+            color: #c44545;
         }
 
         .footer {
             text-align: center;
             margin-top: 30px;
             padding: 20px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            font-size: 0.9rem;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            font-size: 1rem;
+            border: 3px solid #4ecdc4;
         }
 
         .gate-screen {
@@ -228,7 +244,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #dc143c 0%, #003366 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -240,30 +256,34 @@
         }
 
         .gate-content {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.95);
             padding: 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 2px solid #ffffff30;
+            border-radius: 30px;
+            border: 5px solid #ffd93d;
             max-width: 600px;
+            color: #333;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         .verify-btn {
-            background: #4CAF50;
+            background: linear-gradient(135deg, #ff6b6b, #ff9a3d);
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            border-radius: 10px;
+            padding: 18px 35px;
+            font-size: 1.4rem;
+            border-radius: 25px;
             cursor: pointer;
-            margin: 20px 0;
+            margin: 25px 0;
             font-weight: bold;
             transition: all 0.3s ease;
+            border: 4px solid white;
+            box-shadow: 0 8px 20px rgba(255,107,107,0.3);
         }
 
         .verify-btn:hover {
-            background: #45a049;
-            transform: scale(1.05);
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #ff9a3d, #ff6b6b);
+            box-shadow: 0 12px 25px rgba(255,107,107,0.4);
         }
 
         .hidden {
@@ -279,30 +299,36 @@
         }
 
         .social-channel {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 120px;
+            background: linear-gradient(135deg, #6bcba9, #4ecdc4);
+            padding: 20px;
+            border-radius: 15px;
+            min-width: 140px;
+            color: white;
+            border: 3px solid white;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        .pulse {
-            animation: pulse 0.5s ease-in-out;
+        .bounce {
+            animation: bounce 0.5s ease-in-out;
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
         }
 
-        .shake {
-            animation: shake 0.5s ease-in-out;
+        .wiggle {
+            animation: wiggle 0.5s ease-in-out;
+        }
+
+        .animal-doctor {
+            font-size: 3rem;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -310,43 +336,44 @@
     <!-- GATE SCREEN -->
     <div id="gateScreen" class="gate-screen">
         <div class="gate-content">
-            <h1>🚑 EMS EMERGENCY RESCUE</h1>
-            <div style="font-size: 2rem; margin: 20px;">🔒 FOLLOW TO PLAY</div>
+            <div class="animal-doctor">🐱‍⚕️</div>
+            <h1 style="font-size: 3rem; color: #ff6b6b; margin-bottom: 10px;">PET ER EMERGENCY</h1>
+            <div style="font-size: 2rem; margin: 20px; color: #4ecdc4;">🔒 FOLLOW TO PLAY</div>
             
-            <h2>Step 1: Follow Our Channels</h2>
-            <p>To access this FREE medical simulator, please follow our channels:</p>
+            <h2 style="color: #555;">Step 1: Follow Our Channels</h2>
+            <p style="color: #666; font-size: 1.2rem;">Join our animal rescue community to access this PURRR-fect medical simulator!</p>
             
             <div class="social-proof">
                 <div class="social-channel">
-                    <div style="font-size: 2rem;">🎥</div>
+                    <div style="font-size: 2.5rem;">🎥</div>
                     <strong>Rumble</strong>
-                    <div style="font-size: 0.9rem; opacity: 0.8;">EMS Rescue Games</div>
+                    <div style="font-size: 1rem;">Pet ER Games</div>
                 </div>
                 <div class="social-channel">
-                    <div style="font-size: 2rem;">📱</div>
+                    <div style="font-size: 2.5rem;">📱</div>
                     <strong>YouTube</strong>
-                    <div style="font-size: 0.9rem; opacity: 0.8;">EMS Emergency Rescue</div>
+                    <div style="font-size: 1rem;">Pet ER Emergency</div>
                 </div>
             </div>
 
-            <h3>📋 Requirements:</h3>
-            <div style="text-align: left; display: inline-block; background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+            <h3 style="color: #555;">📋 Requirements:</h3>
+            <div style="text-align: left; display: inline-block; background: linear-gradient(135deg, #ffd93d, #ff9a3d); padding: 20px; border-radius: 15px; color: white; border: 3px solid white;">
                 ✅ Subscribe to our Rumble channel<br>
                 ✅ Like the game video<br>
                 ✅ Stay subscribed for updates<br>
-                ✅ Share with friends who love medical games
+                ✅ Share with animal lovers!
             </div>
             
             <button class="verify-btn" onclick="verifySubscription()">
-                ✅ I'VE FOLLOWED & LIKED - PLAY NOW!
+                🐾 I'VE FOLLOWED - PLAY NOW! 🐾
             </button>
             
-            <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
-                🔒 Game unlocks after verification | 💰 100% FREE forever
+            <p style="margin-top: 20px; font-size: 1rem; color: #666;">
+                🔒 Game unlocks after verification | 🎮 100% FREE forever
             </p>
 
-            <div style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">
-                Having issues? Contact us with screenshot proof of subscription
+            <div style="margin-top: 20px; font-size: 0.9rem; color: #888;">
+                Pawsome gaming experience awaits! 🐶🐱
             </div>
         </div>
     </div>
@@ -355,8 +382,8 @@
     <div id="gameContainer" class="hidden">
         <div class="container">
             <header class="header">
-                <h1 class="game-title">🚑 EMS EMERGENCY RESCUE <span class="usa-flag">🇺🇸</span></h1>
-                <div class="call-911">CALL 911 - LIFE SAVING SIMULATOR</div>
+                <h1 class="game-title">🐾 PET ER EMERGENCY 🐾</h1>
+                <div class="clinic-name">ANIMAL RESCUE HOSPITAL</div>
                 
                 <div class="game-stats">
                     <div class="stat-box">
@@ -374,16 +401,16 @@
             <div class="game-area">
                 <div class="main-game">
                     <div class="patient-area" id="patientArea">
-                        <div class="patient-emoji">😷</div>
-                        <div class="emergency-name" id="emergencyName">READY FOR EMERGENCY</div>
-                        <div class="emergency-symptom" id="emergencySymptom">Click START to begin your first rescue mission!</div>
+                        <div class="patient-emoji">😿</div>
+                        <div class="emergency-name" id="emergencyName">READY FOR RESCUE!</div>
+                        <div class="emergency-symptom" id="emergencySymptom">Click START to begin your first animal rescue mission!</div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="progressFill"></div>
                         </div>
                     </div>
 
                     <div class="game-message" id="gameMessage">
-                        Welcome to EMS Emergency Rescue!
+                        Welcome to Pet ER Emergency! 🐶❤️
                     </div>
 
                     <div class="tools-grid" id="toolsArea">
@@ -391,163 +418,165 @@
                     </div>
 
                     <button id="startButton" style="
-                        background: linear-gradient(135deg, #dc143c, #ff4444);
+                        background: linear-gradient(135deg, #ff6b6b, #ff9a3d);
                         border: none;
-                        padding: 15px 40px;
-                        font-size: 1.2rem;
+                        padding: 20px 50px;
+                        font-size: 1.5rem;
                         color: white;
-                        border-radius: 10px;
+                        border-radius: 25px;
                         cursor: pointer;
-                        margin: 20px auto;
+                        margin: 25px auto;
                         display: block;
                         font-weight: bold;
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                        box-shadow: 0 8px 25px rgba(255,107,107,0.3);
+                        border: 4px solid white;
                     ">
-                        🚨 START RESCUE MISSION
+                        🚨 START RESCUE MISSION!
                     </button>
                 </div>
 
                 <div class="sidebar">
-                    <h3>📚 EMS KNOWLEDGE BASE</h3>
+                    <h3 style="color: #ff6b6b; text-align: center; margin-bottom: 20px;">📚 PET CARE TIPS</h3>
                     
                     <div class="educational-tip">
                         <strong>💡 Did You Know?</strong>
-                        <p id="educationalTip">EMS providers have a "golden hour" to stabilize critical patients before transport to the hospital.</p>
+                        <p id="educationalTip">Cats purr not just when happy, but also when stressed or injured - it's a self-healing mechanism!</p>
                     </div>
 
                     <div class="educational-tip">
                         <strong>🎯 Today's Goal</strong>
-                        <p>Save 10 patients with 80% accuracy to unlock the next emergency type!</p>
+                        <p>Save 10 animals with 80% accuracy to unlock special treatments!</p>
                     </div>
 
                     <div class="educational-tip">
                         <strong>🏆 Leaderboard</strong>
                         <p>Your Best: <span id="highScore">0</span> points</p>
-                        <p>Patients Saved: <span id="totalSaved">0</span></p>
+                        <p>Animals Saved: <span id="totalSaved">0</span></p>
                     </div>
 
                     <div style="margin-top: 20px; text-align: center;">
                         <button onclick="resetGame()" style="
-                            background: rgba(255,255,255,0.2);
-                            border: 1px solid white;
+                            background: linear-gradient(135deg, #6bcba9, #4ecdc4);
+                            border: 2px solid white;
                             color: white;
-                            padding: 8px 15px;
-                            border-radius: 5px;
+                            padding: 10px 20px;
+                            border-radius: 10px;
                             cursor: pointer;
+                            font-weight: bold;
                         ">
-                            🔄 Reset Game
+                            🔄 Restart Game
                         </button>
                     </div>
                 </div>
             </div>
 
             <footer class="footer">
-                <div>© 2024 EMS Emergency Rescue - All Rights Reserved</div>
-                <div>Professional EMS Simulation Game - Made for Educational Purposes</div>
-                <div style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">
-                    Follow our channel for more emergency training games!
+                <div>© 2024 Pet ER Emergency - All Rights Reserved</div>
+                <div>Adorable Animal Rescue Simulator - Made with ❤️ for animal lovers!</div>
+                <div style="margin-top: 10px; font-size: 0.9rem; opacity: 0.7;">
+                    Follow our channel for more furry adventures! 🐶🐱🐰
                 </div>
             </footer>
         </div>
     </div>
 
     <script>
-        // ==================== GAME DATA ====================
+        // ==================== GAME DATA - ANIMAL VERSION ====================
         const emergencies = [
             {
-                name: "CARDIAC ARREST",
-                symptom: "💔 Patient unconscious, no pulse, not breathing",
-                correctTool: "defibrillator",
-                tools: ["defibrillator", "tourniquet", "epipen", "oxygen_mask"],
-                educational: "Immediate CPR and defibrillation within 3-5 minutes increases survival rate by 70%"
+                name: "KITTY CARDIAC",
+                symptom: "😿 Fluffy not purring, weak meows, lying still",
+                correctTool: "defurrillator",
+                tools: ["defurrillator", "bandage", "treats", "oxygen_mask"],
+                educational: "Cats hide pain well - purring can be a self-healing mechanism!"
             },
             {
-                name: "SEVERE TRAUMATIC BLEEDING", 
-                symptom: "🩸 Massive bleeding from limb wound, patient pale and dizzy",
-                correctTool: "tourniquet",
-                tools: ["neck_brace", "tourniquet", "iv_bag", "defibrillator"],
-                educational: "Tourniquets should be placed 2-3 inches above the wound and tightened until bleeding stops"
+                name: "PUPPY TRAUMA", 
+                symptom: "🐶 Limping, whining, won't wag tail - paw injury",
+                correctTool: "bandage",
+                tools: ["bandage", "defurrillator", "treats", "stethoscope"],
+                educational: "Dogs are very expressive - tail position and ear movement show pain levels"
             },
             {
-                name: "ANAPHYLACTIC SHOCK",
-                symptom: "🔵 Difficulty breathing, facial swelling, hives after bee sting",
-                correctTool: "epipen",
-                tools: ["epipen", "oxygen_mask", "defibrillator", "blood_pressure"],
-                educational: "Epinephrine auto-injectors must be administered immediately for anaphylactic reactions"
-            },
-            {
-                name: "STROKE (CVA)",
-                symptom: "😵 Facial droop, slurred speech, arm weakness - sudden onset",
+                name: "BUNNY BREATHING",
+                symptom: "🐰 Fast breathing, nose not wiggling, ears drooping",
                 correctTool: "oxygen_mask",
-                tools: ["oxygen_mask", "iv_bag", "neck_brace", "tourniquet"],
-                educational: "Remember FAST: Face drooping, Arm weakness, Speech difficulty, Time to call emergency"
+                tools: ["oxygen_mask", "bandage", "carrot_juice", "treats"],
+                educational: "Rabbits breathe 30-60 times per minute when calm - faster means stress!"
             },
             {
-                name: "SPINAL INJURY",
-                symptom: "🚗 Neck pain after car accident, tingling in extremities",
-                correctTool: "neck_brace",
-                tools: ["neck_brace", "defibrillator", "epipen", "oxygen_mask"],
-                educational: "Spinal immobilization is crucial to prevent further injury to the spinal cord"
+                name: "HAMSTER WHEEL",
+                symptom: "🐹 Stuck in wheel, can't get out, squeaking loudly",
+                correctTool: "wheel_rescue",
+                tools: ["wheel_rescue", "bandage", "treats", "defurrillator"],
+                educational: "Hamsters can run up to 5 miles per night on their wheels!"
             },
             {
-                name: "DIABETIC EMERGENCY",
-                symptom: "🥴 Confusion, sweating, tremors - low blood sugar",
-                correctTool: "glucose_gel",
-                tools: ["glucose_gel", "insulin", "defibrillator", "oxygen_mask"],
-                educational: "For hypoglycemia, give fast-acting sugar. For hyperglycemia, seek immediate medical help."
+                name: "PARROT FEVER",
+                symptom: "🦜 Not talking, feathers puffed, sitting quietly",
+                correctTool: "feather_tonic",
+                tools: ["feather_tonic", "treats", "bandage", "oxygen_mask"],
+                educational: "Parrots can live 50+ years and mimic human speech perfectly!"
             },
             {
-                name: "SEIZURE",
-                symptom: "⚡ Uncontrolled shaking, loss of consciousness",
-                correctTool: "recovery_position",
-                tools: ["recovery_position", "defibrillator", "neck_brace", "oxygen_mask"],
-                educational: "Never put anything in mouth during seizure. Place in recovery position after it stops."
+                name: "GOLDFISH FLOATING",
+                symptom: "🐠 Floating sideways, not swimming, fins drooping",
+                correctTool: "water_cleaner",
+                tools: ["water_cleaner", "treats", "bandage", "oxygen_mask"],
+                educational: "Goldfish have memories lasting months, not seconds as commonly believed!"
             },
             {
-                name: "ALLERGIC REACTION",
-                symptom: "🌡️ Hives, itching, mild swelling after food",
-                correctTool: "antihistamine",
-                tools: ["antihistamine", "epipen", "oxygen_mask", "iv_bag"],
-                educational: "Antihistamines for mild reactions, EpiPen for anaphylaxis with breathing difficulty."
+                name: "TURTLE SHELL",
+                symptom: "🐢 Cracked shell, not moving, head tucked in",
+                correctTool: "shell_repair",
+                tools: ["shell_repair", "bandage", "treats", "water_cleaner"],
+                educational: "Turtles can live over 100 years - some species outlive their owners!"
             },
             {
-                name: "HEAT STROKE",
-                symptom: "🔥 High body temperature, confusion, no sweating",
-                correctTool: "cooling_blanket",
-                tools: ["cooling_blanket", "iv_bag", "oxygen_mask", "defibrillator"],
-                educational: "Cool patient rapidly and provide fluids. Heat stroke is a medical emergency."
+                name: "GUINEA PIG CHILL",
+                symptom: "🐭 Shivering, not eating veggies, hiding constantly",
+                correctTool: "warm_blanket",
+                tools: ["warm_blanket", "treats", "bandage", "carrot_juice"],
+                educational: "Guinea pigs make over 10 different sounds to communicate!"
             },
             {
-                name: "OVERDOSE",
-                symptom: "💊 Slow breathing, pinpoint pupils, unconscious",
-                correctTool: "naloxone",
-                tools: ["naloxone", "oxygen_mask", "iv_bag", "defibrillator"],
-                educational: "Naloxone can reverse opioid overdose. Always call EMS for overdose cases."
+                name: "CHINCHILLA DUST",
+                symptom: "🐭 Not dust bathing, fur matted, sneezing fits",
+                correctTool: "dust_bath",
+                tools: ["dust_bath", "treats", "bandage", "warm_blanket"],
+                educational: "Chinchillas take dust baths to clean their incredibly dense fur!"
+            },
+            {
+                name: "HEDGEHOG BALL",
+                symptom: "🦔 Curled in ball for hours, not unrolling, quills drooping",
+                correctTool: "hedgehog_unroller",
+                tools: ["hedgehog_unroller", "treats", "bandage", "warm_blanket"],
+                educational: "Hedgehogs have 5000-7000 quills that they can't shoot!"
             }
         ];
 
         const toolsData = {
-            defibrillator: { name: "Automated External Defibrillator", emoji: "⚡" },
-            tourniquet: { name: "Combat Tourniquet", emoji: "🩹" },
-            epipen: { name: "Epinephrine Auto-Injector", emoji: "💉" },
+            defurrillator: { name: "Defurrillator", emoji: "⚡" },
+            bandage: { name: "Cute Bandage", emoji: "🩹" },
+            treats: { name: "Magic Treats", emoji: "🍪" },
             oxygen_mask: { name: "Oxygen Mask", emoji: "💨" },
-            iv_bag: { name: "IV Fluids", emoji: "💧" },
-            neck_brace: { name: "Cervical Collar", emoji: "📋" },
-            blood_pressure: { name: "BP Monitor", emoji: "🩸" },
-            glucose_gel: { name: "Glucose Gel", emoji: "🍯" },
-            insulin: { name: "Insulin", emoji: "💊" },
-            recovery_position: { name: "Recovery Position", emoji: "🔄" },
-            antihistamine: { name: "Antihistamine", emoji: "💊" },
-            cooling_blanket: { name: "Cooling Blanket", emoji: "❄️" },
-            naloxone: { name: "Naloxone", emoji: "💉" }
+            stethoscope: { name: "Stethoscope", emoji: "🎧" },
+            wheel_rescue: { name: "Wheel Rescue Kit", emoji: "🔄" },
+            feather_tonic: { name: "Feather Tonic", emoji: "💧" },
+            water_cleaner: { name: "Water Cleaner", emoji: "🌊" },
+            shell_repair: { name: "Shell Repair", emoji: "🔧" },
+            warm_blanket: { name: "Warm Blanket", emoji: "🛏️" },
+            carrot_juice: { name: "Carrot Juice", emoji: "🥕" },
+            dust_bath: { name: "Dust Bath", emoji: "💨" },
+            hedgehog_unroller: { name: "Hedgehog Unroller", emoji: "🦔" }
         };
 
         const educationalTips = [
-            "EMS stands for Emergency Medical Services - the system that provides emergency medical care",
-            "The 'Golden Hour' refers to the first 60 minutes after traumatic injury when treatment is most critical",
-            "Paramedics can perform advanced procedures like intubation and medication administration",
-            "Always call your local emergency number first before providing first aid",
-            "Knowing basic CPR can double or triple a cardiac arrest victim's chance of survival"
+            "Cats have 32 muscles in each ear - that's why they're so expressive!",
+            "Dogs can understand up to 250 words and gestures - smarter than toddlers!",
+            "Rabbits purr too! They grind their teeth softly when happy and relaxed",
+            "Hamsters store food in their cheek pouches that can expand to double their head size!",
+            "Parrots dance to music and have their own favorite songs!"
         ];
 
         // ==================== GAME STATE ====================
@@ -582,18 +611,23 @@
         // ==================== FOLLOW TO PLAY SYSTEM ====================
         function checkInitialVerification() {
             // IL GATE RESTA SEMPRE VISIBILE - NESSUNA VERIFICA AUTOMATICA
-            console.log("Gate system active - waiting for user verification");
+            console.log("Pet ER Gate active - waiting for user verification");
         }
 
         function verifySubscription() {
-            const userConfirmed = confirm("Have you really subscribed to our Rumble channel and liked the video?\n\nWe work hard to create free educational games. Your support helps us continue!");
+            const userConfirmed = confirm("🐾 PET ER EMERGENCY - FOLLOW TO PLAY\n\n" +
+                "Please:\n" +
+                "1. Visit our Rumble channel: Pet ER Games\n" +
+                "2. Subscribe and like our videos\n" +
+                "3. Return here and click OK\n\n" +
+                "Your support helps us save more virtual animals! 🐶❤️");
             
             if (userConfirmed) {
-                localStorage.setItem('emsGameVerified', 'true');
+                localStorage.setItem('petERVerified', 'true');
                 unlockGame();
-                showMessage("🎉 Thank you for your support! Enjoy the game!", "success");
+                showMessage("🎉 Thank you for your support! Time to save some animals! 🐾", "success");
             } else {
-                alert("Please subscribe to our channels to access the game. It helps us create more free medical games!");
+                alert("Please subscribe to access this pawsome game! 🐱");
             }
         }
 
@@ -609,8 +643,8 @@
 
         // ==================== GAME FUNCTIONS ====================
         function initGame() {
-            const savedHighScore = localStorage.getItem('emsHighScore');
-            const savedTotalSaved = localStorage.getItem('emsTotalSaved');
+            const savedHighScore = localStorage.getItem('petERHighScore');
+            const savedTotalSaved = localStorage.getItem('petERTotalSaved');
             
             if (savedHighScore) gameState.highScore = parseInt(savedHighScore);
             if (savedTotalSaved) gameState.totalSaved = parseInt(savedTotalSaved);
@@ -648,10 +682,10 @@
             const emergency = gameState.currentEmergency;
             elements.emergencyName.textContent = emergency.name;
             elements.emergencySymptom.textContent = emergency.symptom;
-            elements.patientArea.classList.add('pulse');
+            elements.patientArea.classList.add('bounce');
             
             setTimeout(() => {
-                elements.patientArea.classList.remove('pulse');
+                elements.patientArea.classList.remove('bounce');
             }, 500);
         }
 
@@ -682,27 +716,27 @@
                 gameState.patientsSaved++;
                 gameState.totalSaved++;
                 
-                showMessage("✅ CORRECT! Patient stabilized and transported!", "success");
-                elements.patientArea.classList.add('pulse');
+                showMessage("✅ PAWSOME! Animal rescued and happy! 🐾", "success");
+                elements.patientArea.classList.add('bounce');
                 
                 if (gameState.score > gameState.highScore) {
                     gameState.highScore = gameState.score;
-                    localStorage.setItem('emsHighScore', gameState.highScore);
+                    localStorage.setItem('petERHighScore', gameState.highScore);
                 }
-                localStorage.setItem('emsTotalSaved', gameState.totalSaved);
+                localStorage.setItem('petERTotalSaved', gameState.totalSaved);
                 
                 setTimeout(() => {
-                    elements.patientArea.classList.remove('pulse');
+                    elements.patientArea.classList.remove('bounce');
                     startNewEmergency();
                 }, 2000);
                 
             } else {
                 gameState.timeLeft = Math.max(3, gameState.timeLeft - 5);
-                showMessage("❌ INCORRECT TREATMENT! Patient condition worsening!", "error");
-                elements.patientArea.classList.add('shake');
+                showMessage("❌ OOPS! Wrong treatment - animal still needs help! 😿", "error");
+                elements.patientArea.classList.add('wiggle');
                 
                 setTimeout(() => {
-                    elements.patientArea.classList.remove('shake');
+                    elements.patientArea.classList.remove('wiggle');
                 }, 500);
             }
             
@@ -718,7 +752,7 @@
                 
                 if (gameState.timeLeft <= 0) {
                     clearInterval(gameState.gameTimer);
-                    showMessage("⏰ TIME'S UP! Patient didn't make it...", "error");
+                    showMessage("⏰ TIME'S UP! Animal needs more help! 🐶", "error");
                     
                     setTimeout(() => {
                         if (gameState.gameActive) {
@@ -740,11 +774,11 @@
             elements.progressFill.style.width = `${progressPercent}%`;
             
             if (gameState.timeLeft <= 5) {
-                elements.progressFill.style.background = '#f44336';
+                elements.progressFill.style.background = 'linear-gradient(90deg, #ff6b6b, #c44545)';
             } else if (gameState.timeLeft <= 10) {
-                elements.progressFill.style.background = '#ff9800';
+                elements.progressFill.style.background = 'linear-gradient(90deg, #ff9a3d, #ff6b6b)';
             } else {
-                elements.progressFill.style.background = '#4CAF50';
+                elements.progressFill.style.background = 'linear-gradient(90deg, #6bcba9, #4ecdc4)';
             }
         }
 
@@ -769,10 +803,10 @@
             clearInterval(gameState.gameTimer);
             elements.startButton.style.display = 'block';
             
-            elements.emergencyName.textContent = 'READY FOR EMERGENCY';
-            elements.emergencySymptom.textContent = 'Click START to begin your next rescue mission!';
+            elements.emergencyName.textContent = 'READY FOR RESCUE!';
+            elements.emergencySymptom.textContent = 'Click START to begin your next animal rescue mission!';
             elements.toolsArea.innerHTML = '';
-            showMessage('Game reset. Ready for new challenges!', 'success');
+            showMessage('Game reset. Ready for more furry adventures! 🐾', 'success');
             
             gameState.score = 0;
             gameState.patientsSaved = 0;
