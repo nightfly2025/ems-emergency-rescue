@@ -275,7 +275,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .social-proof {
@@ -597,8 +597,6 @@
         };
 
         // ==================== FOLLOW TO PLAY SYSTEM ====================
-        let isVerified = false;
-
         function checkInitialVerification() {
             const saved = localStorage.getItem('emsGameVerified');
             if (saved === 'true') {
@@ -625,9 +623,8 @@
         function unlockGame() {
             document.getElementById('gateScreen').classList.add('hidden');
             document.getElementById('gameContainer').classList.remove('hidden');
-            isVerified = true;
             
-            if (typeof initGame === 'function' && !window.gameInitialized) {
+            if (!window.gameInitialized) {
                 initGame();
                 window.gameInitialized = true;
             }
