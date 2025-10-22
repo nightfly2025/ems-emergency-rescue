@@ -481,74 +481,74 @@
     </div>
 
     <script>
-        // ==================== GAME DATA - HUMAN EMERGENCIES + ANIMAL FACES ====================
+        // ==================== GAME DATA - COERENTE: FACCINE ANIMALI + PROBLEMI UMANI CORRELATI ====================
         const emergencies = [
             {
                 name: "HEART ATTACK",
-                symptom: "😿 Chest pain, difficulty breathing, pale skin",
+                symptom: "😿 Chest pain, difficulty breathing, pale skin - looks distressed",
                 correctTool: "defibrillator",
                 tools: ["defibrillator", "oxygen_mask", "aspirin", "iv_fluids"],
                 educational: "CPR within 3-5 minutes increases survival rate by 70%"
             },
             {
                 name: "STROKE", 
-                symptom: "🐶 Facial droop, slurred speech, arm weakness",
+                symptom: "🐶 Facial droop on one side, slurred speech, arm weakness",
                 correctTool: "oxygen_mask",
                 tools: ["oxygen_mask", "iv_fluids", "blood_thinner", "ct_scan"],
                 educational: "Remember FAST: Face drooping, Arm weakness, Speech difficulty, Time to call emergency"
             },
             {
                 name: "SEVERE BLEEDING",
-                symptom: "🐰 Massive bleeding from wound, dizziness, pale skin",
+                symptom: "🐇 Rapid blood loss from wound, dizziness, pale skin - fast like rabbit",
                 correctTool: "tourniquet",
                 tools: ["tourniquet", "bandage", "iv_fluids", "pain_reliever"],
                 educational: "Tourniquets should be placed 2-3 inches above the wound"
             },
             {
                 name: "ALLERGIC REACTION",
-                symptom: "🐹 Difficulty breathing, facial swelling, hives",
+                symptom: "🐹 Swollen face, difficulty breathing, hives - puffy like hamster",
                 correctTool: "epipen",
                 tools: ["epipen", "antihistamine", "oxygen_mask", "steroids"],
                 educational: "Epinephrine must be administered immediately for anaphylactic reactions"
             },
             {
-                name: "DIABETIC EMERGENCY",
-                symptom: "🐨 Confusion, sweating, tremors, loss of consciousness",
+                name: "DIABETIC EMERGENCY", 
+                symptom: "🐨 Confusion, sweating, tremors - slow and disoriented like koala",
                 correctTool: "glucose_gel",
                 tools: ["glucose_gel", "insulin", "iv_fluids", "blood_test"],
                 educational: "Low blood sugar can cause seizures and coma"
             },
             {
                 name: "ASTHMA ATTACK",
-                symptom: "🐭 Wheezing, shortness of breath, chest tightness",
+                symptom: "🐭 Wheezing, shortness of breath, chest tightness - small breathing like mouse",
                 correctTool: "inhaler",
                 tools: ["inhaler", "oxygen_mask", "steroids", "nebulizer"],
                 educational: "Asthma affects 1 in 13 people - inhalers provide immediate relief"
             },
             {
                 name: "SEIZURE",
-                symptom: "🦔 Uncontrolled shaking, loss of consciousness, confusion",
+                symptom: "🐍 Uncontrolled shaking, loss of consciousness - coiled like snake",
                 correctTool: "recovery_position",
                 tools: ["recovery_position", "oxygen_mask", "iv_fluids", "medication"],
                 educational: "Never put anything in mouth during seizure - place in recovery position after"
             },
             {
                 name: "BURN INJURY",
-                symptom: "🐢 Red, blistered skin, severe pain, swelling",
+                symptom: "🐢 Red, blistered skin, severe pain - slow healing like turtle",
                 correctTool: "cool_burn",
                 tools: ["cool_burn", "bandage", "pain_reliever", "iv_fluids"],
                 educational: "Cool burns with running water for 10-20 minutes, never ice"
             },
             {
                 name: "OVERDOSE",
-                symptom: "🐍 Slow breathing, pinpoint pupils, unconsciousness",
+                symptom: "🦊 Slow breathing, pinpoint pupils, unconscious - sly like fox",
                 correctTool: "naloxone",
                 tools: ["naloxone", "oxygen_mask", "iv_fluids", "activated_charcoal"],
                 educational: "Naloxone can reverse opioid overdose within 2-3 minutes"
             },
             {
                 name: "HYPOTHERMIA",
-                symptom: "🐧 Shivering, confusion, slow pulse, pale skin",
+                symptom: "🐧 Shivering, confusion, slow pulse - cold weather like penguin",
                 correctTool: "warm_blanket",
                 tools: ["warm_blanket", "warm_fluids", "oxygen_mask", "iv_fluids"],
                 educational: "Warm hypothermia patients gradually - rapid warming can cause dangerous heart rhythms"
@@ -667,7 +667,6 @@
 
         // ==================== FOLLOW TO PLAY SYSTEM ====================
         function checkInitialVerification() {
-            // IL GATE RESTA SEMPRE VISIBILE - NESSUNA VERIFICA AUTOMATICA
             console.log("Animal ER Gate active - waiting for user verification");
         }
 
@@ -774,7 +773,7 @@
                 gameState.patientsSaved++;
                 gameState.totalSaved++;
                 
-                showMessage("✅ CORRECT! Patient stabilized! 🚑", "success");
+                showMessage("✅ CORRECT! Patient stabilized and transported! 🚑", "success");
                 elements.patientArea.classList.add('bounce');
                 
                 if (gameState.score > gameState.highScore) {
@@ -790,7 +789,7 @@
                 
             } else {
                 gameState.timeLeft = Math.max(3, gameState.timeLeft - 5);
-                showMessage("❌ INCORRECT! Patient condition worsening!", "error");
+                showMessage("❌ INCORRECT TREATMENT! Patient condition worsening!", "error");
                 elements.patientArea.classList.add('wiggle');
                 
                 setTimeout(() => {
