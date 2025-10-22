@@ -5,9 +5,231 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMS Emergency Rescue - Follow to Play</title>
     <style>
-        /* [MANTIENI TUTTO IL CSS PRECEDENTE] */
-        
-        /* AGGIUNGI QUESTI STILI */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #dc143c 0%, #003366 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .usa-flag {
+            font-size: 1.5rem;
+            margin: 0 10px;
+        }
+
+        .call-911 {
+            background: #dc143c;
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Game Stats */
+        .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Game Area */
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .patient-area {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .patient-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .emergency-name {
+            color: #dc143c;
+            font-size: 1.5rem;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .emergency-symptom {
+            color: #333;
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 480px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tool {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 12px;
+            padding: 20px 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, #45a049, #4CAF50);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .tool:active {
+            transform: translateY(0);
+        }
+
+        .tool-emoji {
+            font-size: 2rem;
+        }
+
+        .tool-name {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .educational-tip {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Messages */
+        .game-message {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid #4CAF50;
+        }
+
+        .message-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 2px solid #f44336;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* Gate Screen */
         .gate-screen {
             position: fixed;
             top: 0;
@@ -70,6 +292,27 @@
             border-radius: 10px;
             min-width: 120px;
         }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
     </style>
 </head>
 <body>
@@ -117,63 +360,152 @@
         </div>
     </div>
 
-    <!-- MAIN GAME (nascosto inizialmente) -->
+    <!-- MAIN GAME -->
     <div id="gameContainer" class="hidden">
-        <!-- [INCCOLLA QUI TUTTO IL CODICE DEL GIOCO CHE ABBIAMO] -->
+        <div class="container">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="game-title">🚑 EMS EMERGENCY RESCUE <span class="usa-flag">🇺🇸</span></h1>
+                <div class="call-911">CALL 911 - LIFE SAVING SIMULATOR</div>
+                
+                <div class="game-stats">
+                    <div class="stat-box">
+                        ⏰ TIME: <span id="timeLeft">15</span>s
+                    </div>
+                    <div class="stat-box">
+                        ⭐ SCORE: <span id="currentScore">0</span>
+                    </div>
+                    <div class="stat-box">
+                        🏥 SAVED: <span id="patientsSaved">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Game Area -->
+            <div class="game-area">
+                <!-- Main Game -->
+                <div class="main-game">
+                    <div class="patient-area" id="patientArea">
+                        <div class="patient-emoji">😷</div>
+                        <div class="emergency-name" id="emergencyName">READY FOR EMERGENCY</div>
+                        <div class="emergency-symptom" id="emergencySymptom">Click START to begin your first rescue mission!</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Game Message -->
+                    <div class="game-message" id="gameMessage">
+                        Welcome to EMS Emergency Rescue!
+                    </div>
+
+                    <!-- Tools Grid -->
+                    <div class="tools-grid" id="toolsArea">
+                        <!-- Tools will be generated here -->
+                    </div>
+
+                    <!-- Start Button -->
+                    <button id="startButton" style="
+                        background: linear-gradient(135deg, #dc143c, #ff4444);
+                        border: none;
+                        padding: 15px 40px;
+                        font-size: 1.2rem;
+                        color: white;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        margin: 20px auto;
+                        display: block;
+                        font-weight: bold;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                    ">
+                        🚨 START RESCUE MISSION
+                    </button>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <h3>📚 EMS KNOWLEDGE BASE</h3>
+                    
+                    <div class="educational-tip">
+                        <strong>💡 Did You Know?</strong>
+                        <p id="educationalTip">EMS providers have a "golden hour" to stabilize critical patients before transport to the hospital.</p>
+                    </div>
+
+                    <div class="educational-tip">
+                        <strong>🎯 Today's Goal</strong>
+                        <p>Save 10 patients with 80% accuracy to unlock the next emergency type!</p>
+                    </div>
+
+                    <div class="educational-tip">
+                        <strong>🏆 Leaderboard</strong>
+                        <p>Your Best: <span id="highScore">0</span> points</p>
+                        <p>Patients Saved: <span id="totalSaved">0</span></p>
+                    </div>
+
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button onclick="resetGame()" style="
+                            background: rgba(255,255,255,0.2);
+                            border: 1px solid white;
+                            color: white;
+                            padding: 8px 15px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                        ">
+                            🔄 Reset Game
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div>© 2024 EMS Emergency Rescue - All Rights Reserved</div>
+                <div>Professional EMS Simulation Game - Made for Educational Purposes</div>
+                <div style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">
+                    Follow our channel for more emergency training games!
+                </div>
+            </footer>
+        </div>
     </div>
 
     <script>
-        // ==================== FOLLOW TO PLAY SYSTEM ====================
-        let isVerified = false;
-
-        function checkInitialVerification() {
-            const saved = localStorage.getItem('emsGameVerified');
-            if (saved === 'true') {
-                unlockGame();
-            }
-        }
-
-        function verifySubscription() {
-            // Sistema a "onore" - poi possiamo migliorare
-            const userConfirmed = confirm("Have you really subscribed to our Rumble channel and liked the video?\n\nWe work hard to create free educational games. Your support helps us continue!");
-            
-            if (userConfirmed) {
-                // Salva la verifica per 30 giorni
-                localStorage.setItem('emsGameVerified', 'true');
-                const expiry = new Date();
-                expiry.setDate(expiry.getDate() + 30);
-                localStorage.setItem('emsGameExpiry', expiry.toISOString());
-                
-                unlockGame();
-                showMessage("🎉 Thank you for your support! Enjoy the game!", "success");
-            } else {
-                alert("Please subscribe to our channels to access the game. It helps us create more free medical games!");
-            }
-        }
-
-        function unlockGame() {
-            document.getElementById('gateScreen').classList.add('hidden');
-            document.getElementById('gameContainer').classList.remove('hidden');
-            isVerified = true;
-            
-            // Avvia il gioco se non è già iniziato
-            if (typeof initGame === 'function' && !window.gameInitialized) {
-                initGame();
-                window.gameInitialized = true;
-            }
-        }
-
-        function checkVerificationExpiry() {
-            const expiry = localStorage.getItem('emsGameExpiry');
-            if (expiry && new Date() > new Date(expiry)) {
-                localStorage.removeItem('emsGameVerified');
-                localStorage.removeItem('emsGameExpiry');
-                location.reload();
-            }
-        }
-
-        // ==================== NUOVE EMERGENZE MEDICHE ====================
-        const newEmergencies = [
+        // ==================== GAME DATA ====================
+        const emergencies = [
+            {
+                name: "CARDIAC ARREST",
+                symptom: "💔 Patient unconscious, no pulse, not breathing",
+                correctTool: "defibrillator",
+                tools: ["defibrillator", "tourniquet", "epipen", "oxygen_mask"],
+                educational: "Immediate CPR and defibrillation within 3-5 minutes increases survival rate by 70%"
+            },
+            {
+                name: "SEVERE TRAUMATIC BLEEDING", 
+                symptom: "🩸 Massive bleeding from limb wound, patient pale and dizzy",
+                correctTool: "tourniquet",
+                tools: ["neck_brace", "tourniquet", "iv_bag", "defibrillator"],
+                educational: "Tourniquets should be placed 2-3 inches above the wound and tightened until bleeding stops"
+            },
+            {
+                name: "ANAPHYLACTIC SHOCK",
+                symptom: "🔵 Difficulty breathing, facial swelling, hives after bee sting",
+                correctTool: "epipen",
+                tools: ["epipen", "oxygen_mask", "defibrillator", "blood_pressure"],
+                educational: "Epinephrine auto-injectors must be administered immediately for anaphylactic reactions"
+            },
+            {
+                name: "STROKE (CVA)",
+                symptom: "😵 Facial droop, slurred speech, arm weakness - sudden onset",
+                correctTool: "oxygen_mask",
+                tools: ["oxygen_mask", "iv_bag", "neck_brace", "tourniquet"],
+                educational: "Remember FAST: Face drooping, Arm weakness, Speech difficulty, Time to call emergency"
+            },
+            {
+                name: "SPINAL INJURY",
+                symptom: "🚗 Neck pain after car accident, tingling in extremities",
+                correctTool: "neck_brace",
+                tools: ["neck_brace", "defibrillator", "epipen", "oxygen_mask"],
+                educational: "Spinal immobilization is crucial to prevent further injury to the spinal cord"
+            },
             {
                 name: "DIABETIC EMERGENCY",
                 symptom: "🥴 Confusion, sweating, tremors - low blood sugar",
@@ -211,8 +543,14 @@
             }
         ];
 
-        // Aggiungi questi nuovi strumenti
-        const newTools = {
+        const toolsData = {
+            defibrillator: { name: "Automated External Defibrillator", emoji: "⚡" },
+            tourniquet: { name: "Combat Tourniquet", emoji: "🩹" },
+            epipen: { name: "Epinephrine Auto-Injector", emoji: "💉" },
+            oxygen_mask: { name: "Oxygen Mask", emoji: "💨" },
+            iv_bag: { name: "IV Fluids", emoji: "💧" },
+            neck_brace: { name: "Cervical Collar", emoji: "📋" },
+            blood_pressure: { name: "BP Monitor", emoji: "🩸" },
             glucose_gel: { name: "Glucose Gel", emoji: "🍯" },
             insulin: { name: "Insulin", emoji: "💊" },
             recovery_position: { name: "Recovery Position", emoji: "🔄" },
@@ -221,23 +559,266 @@
             naloxone: { name: "Naloxone", emoji: "💉" }
         };
 
-        // ==================== INIZIALIZZAZIONE ====================
+        const educationalTips = [
+            "EMS stands for Emergency Medical Services - the system that provides emergency medical care",
+            "The 'Golden Hour' refers to the first 60 minutes after traumatic injury when treatment is most critical",
+            "Paramedics can perform advanced procedures like intubation and medication administration",
+            "Always call your local emergency number first before providing first aid",
+            "Knowing basic CPR can double or triple a cardiac arrest victim's chance of survival"
+        ];
+
+        // ==================== GAME STATE ====================
+        let gameState = {
+            score: 0,
+            timeLeft: 15,
+            currentEmergency: null,
+            gameTimer: null,
+            patientsSaved: 0,
+            highScore: 0,
+            totalSaved: 0,
+            gameActive: false
+        };
+
+        // ==================== DOM ELEMENTS ====================
+        const elements = {
+            timeLeft: document.getElementById('timeLeft'),
+            currentScore: document.getElementById('currentScore'),
+            patientsSaved: document.getElementById('patientsSaved'),
+            patientArea: document.getElementById('patientArea'),
+            toolsArea: document.getElementById('toolsArea'),
+            gameMessage: document.getElementById('gameMessage'),
+            emergencyName: document.getElementById('emergencyName'),
+            emergencySymptom: document.getElementById('emergencySymptom'),
+            progressFill: document.getElementById('progressFill'),
+            startButton: document.getElementById('startButton'),
+            educationalTip: document.getElementById('educationalTip'),
+            highScore: document.getElementById('highScore'),
+            totalSaved: document.getElementById('totalSaved')
+        };
+
+        // ==================== FOLLOW TO PLAY SYSTEM ====================
+        let isVerified = false;
+
+        function checkInitialVerification() {
+            const saved = localStorage.getItem('emsGameVerified');
+            if (saved === 'true') {
+                unlockGame();
+            }
+        }
+
+        function verifySubscription() {
+            const userConfirmed = confirm("Have you really subscribed to our Rumble channel and liked the video?\n\nWe work hard to create free educational games. Your support helps us continue!");
+            
+            if (userConfirmed) {
+                localStorage.setItem('emsGameVerified', 'true');
+                const expiry = new Date();
+                expiry.setDate(expiry.getDate() + 30);
+                localStorage.setItem('emsGameExpiry', expiry.toISOString());
+                
+                unlockGame();
+                showMessage("🎉 Thank you for your support! Enjoy the game!", "success");
+            } else {
+                alert("Please subscribe to our channels to access the game. It helps us create more free medical games!");
+            }
+        }
+
+        function unlockGame() {
+            document.getElementById('gateScreen').classList.add('hidden');
+            document.getElementById('gameContainer').classList.remove('hidden');
+            isVerified = true;
+            
+            if (typeof initGame === 'function' && !window.gameInitialized) {
+                initGame();
+                window.gameInitialized = true;
+            }
+        }
+
+        function checkVerificationExpiry() {
+            const expiry = localStorage.getItem('emsGameExpiry');
+            if (expiry && new Date() > new Date(expiry)) {
+                localStorage.removeItem('emsGameVerified');
+                localStorage.removeItem('emsGameExpiry');
+                location.reload();
+            }
+        }
+
+        // ==================== GAME FUNCTIONS ====================
+        function initGame() {
+            const savedHighScore = localStorage.getItem('emsHighScore');
+            const savedTotalSaved = localStorage.getItem('emsTotalSaved');
+            
+            if (savedHighScore) gameState.highScore = parseInt(savedHighScore);
+            if (savedTotalSaved) gameState.totalSaved = parseInt(savedTotalSaved);
+            
+            updateDisplay();
+            showRandomEducationalTip();
+            
+            elements.startButton.addEventListener('click', startNewGame);
+        }
+
+        function startNewGame() {
+            gameState.gameActive = true;
+            gameState.score = 0;
+            gameState.patientsSaved = 0;
+            elements.startButton.style.display = 'none';
+            startNewEmergency();
+        }
+
+        function startNewEmergency() {
+            if (!gameState.gameActive) return;
+            
+            clearInterval(gameState.gameTimer);
+            
+            gameState.currentEmergency = emergencies[Math.floor(Math.random() * emergencies.length)];
+            gameState.timeLeft = 15;
+            
+            updateDisplay();
+            showPatient();
+            showTools();
+            startTimer();
+            showRandomEducationalTip();
+        }
+
+        function showPatient() {
+            const emergency = gameState.currentEmergency;
+            elements.emergencyName.textContent = emergency.name;
+            elements.emergencySymptom.textContent = emergency.symptom;
+            elements.patientArea.classList.add('pulse');
+            
+            setTimeout(() => {
+                elements.patientArea.classList.remove('pulse');
+            }, 500);
+        }
+
+        function showTools() {
+            elements.toolsArea.innerHTML = '';
+            const emergency = gameState.currentEmergency;
+            
+            emergency.tools.forEach(toolId => {
+                const tool = toolsData[toolId];
+                const toolElement = document.createElement('button');
+                toolElement.className = 'tool';
+                toolElement.innerHTML = `
+                    <div class="tool-emoji">${tool.emoji}</div>
+                    <div class="tool-name">${tool.name}</div>
+                `;
+                toolElement.onclick = () => useTool(toolId);
+                elements.toolsArea.appendChild(toolElement);
+            });
+        }
+
+        function useTool(toolId) {
+            if (!gameState.gameActive) return;
+            
+            const isCorrect = toolId === gameState.currentEmergency.correctTool;
+            
+            if (isCorrect) {
+                gameState.score += 100;
+                gameState.patientsSaved++;
+                gameState.totalSaved++;
+                
+                showMessage("✅ CORRECT! Patient stabilized and transported!", "success");
+                elements.patientArea.classList.add('pulse');
+                
+                if (gameState.score > gameState.highScore) {
+                    gameState.highScore = gameState.score;
+                    localStorage.setItem('emsHighScore', gameState.highScore);
+                }
+                localStorage.setItem('emsTotalSaved', gameState.totalSaved);
+                
+                setTimeout(() => {
+                    elements.patientArea.classList.remove('pulse');
+                    startNewEmergency();
+                }, 2000);
+                
+            } else {
+                gameState.timeLeft = Math.max(3, gameState.timeLeft - 5);
+                showMessage("❌ INCORRECT TREATMENT! Patient condition worsening!", "error");
+                elements.patientArea.classList.add('shake');
+                
+                setTimeout(() => {
+                    elements.patientArea.classList.remove('shake');
+                }, 500);
+            }
+            
+            updateDisplay();
+        }
+
+        function startTimer() {
+            clearInterval(gameState.gameTimer);
+            
+            gameState.gameTimer = setInterval(() => {
+                gameState.timeLeft--;
+                updateDisplay();
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameState.gameTimer);
+                    showMessage("⏰ TIME'S UP! Patient didn't make it...", "error");
+                    
+                    setTimeout(() => {
+                        if (gameState.gameActive) {
+                            startNewEmergency();
+                        }
+                    }, 2000);
+                }
+            }, 1000);
+        }
+
+        function updateDisplay() {
+            elements.timeLeft.textContent = gameState.timeLeft;
+            elements.currentScore.textContent = gameState.score;
+            elements.patientsSaved.textContent = gameState.patientsSaved;
+            elements.highScore.textContent = gameState.highScore;
+            elements.totalSaved.textContent = gameState.totalSaved;
+            
+            const progressPercent = (gameState.timeLeft / 15) * 100;
+            elements.progressFill.style.width = `${progressPercent}%`;
+            
+            if (gameState.timeLeft <= 5) {
+                elements.progressFill.style.background = '#f44336';
+            } else if (gameState.timeLeft <= 10) {
+                elements.progressFill.style.background = '#ff9800';
+            } else {
+                elements.progressFill.style.background = '#4CAF50';
+            }
+        }
+
+        function showMessage(text, type) {
+            elements.gameMessage.textContent = text;
+            elements.gameMessage.className = 'game-message';
+            
+            if (type === 'success') {
+                elements.gameMessage.classList.add('message-success');
+            } else {
+                elements.gameMessage.classList.add('message-error');
+            }
+        }
+
+        function showRandomEducationalTip() {
+            const randomTip = educationalTips[Math.floor(Math.random() * educationalTips.length)];
+            elements.educationalTip.textContent = randomTip;
+        }
+
+        function resetGame() {
+            gameState.gameActive = false;
+            clearInterval(gameState.gameTimer);
+            elements.startButton.style.display = 'block';
+            
+            elements.emergencyName.textContent = 'READY FOR EMERGENCY';
+            elements.emergencySymptom.textContent = 'Click START to begin your next rescue mission!';
+            elements.toolsArea.innerHTML = '';
+            showMessage('Game reset. Ready for new challenges!', 'success');
+            
+            gameState.score = 0;
+            gameState.patientsSaved = 0;
+            updateDisplay();
+        }
+
+        // ==================== INITIALIZATION ====================
         document.addEventListener('DOMContentLoaded', function() {
             checkVerificationExpiry();
             checkInitialVerification();
-            
-            // Unisci le emergenze esistenti con le nuove
-            if (typeof emergencies !== 'undefined') {
-                emergencies.push(...newEmergencies);
-            }
-            
-            // Unisci gli strumenti
-            if (typeof toolsData !== 'undefined') {
-                Object.assign(toolsData, newTools);
-            }
         });
-
-        // [MANTIENI TUTTO IL RESTO DEL CODICE DEL GIOCO]
     </script>
 </body>
 </html>
