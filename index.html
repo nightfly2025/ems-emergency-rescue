@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANIMAL ER - EMS Open World</title>
+    <title>TRAUMA TEAM - Advanced Medical Simulator</title>
     <style>
         * {
             margin: 0;
@@ -12,769 +12,591 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
             background: #000;
-            color: white;
+            color: #fff;
+            font-family: 'Courier New', monospace;
             overflow: hidden;
+            user-select: none;
         }
 
-        /* SCREEN MANAGER */
-        .screen {
+        #gameContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #gameCanvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            transition: opacity 0.5s ease;
+            image-rendering: pixelated;
         }
 
-        .hidden {
-            display: none;
-        }
-
-        .active {
-            display: block;
-        }
-
-        /* CHARACTER SELECTION */
-        #characterSelection {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .characters-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            max-width: 900px;
-            margin: 30px 0;
-        }
-
-        .character-card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            border: 3px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .character-card:hover {
-            transform: scale(1.05);
-            border-color: #4ecdc4;
-        }
-
-        .character-card.selected {
-            border-color: #ff6b6b;
-            background: rgba(255,107,107,0.2);
-        }
-
-        .character-emoji {
-            font-size: 4rem;
-            margin-bottom: 10px;
-        }
-
-        .character-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #4ecdc4;
-            margin-bottom: 10px;
-        }
-
-        .character-stats {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 10px 0;
-        }
-
-        .stat {
-            background: rgba(255,255,255,0.2);
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-        }
-
-        /* GAME SCREEN */
-        #gameScreen {
-            background: #1a1a2e;
-        }
-
-        .game-header {
-            background: rgba(0,0,0,0.8);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #ff6b6b;
-        }
-
-        .game-ui {
-            display: flex;
-            gap: 15px;
-        }
-
-        .ui-box {
-            background: rgba(255,255,255,0.1);
-            padding: 8px 15px;
-            border-radius: 8px;
-            border: 1px solid #4ecdc4;
-        }
-
-        /* GAME WORLD */
-        #gameWorld {
-            width: 100%;
-            height: calc(100vh - 60px);
-            position: relative;
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            overflow: hidden;
-        }
-
-        /* AMBULANCE */
-        #ambulance {
+        #uiOverlay {
             position: absolute;
-            width: 100px;
-            height: 50px;
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            border-radius: 8px;
-            border: 2px solid #fff;
-            transition: all 0.1s ease;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
             z-index: 100;
         }
 
-        #ambulance::before {
-            content: '🚑';
+        .debug-info {
             position: absolute;
-            top: -25px;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border: 1px solid #00ff00;
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        .medical-ui {
+            position: absolute;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 1.5rem;
-        }
-
-        /* PLAYER */
-        .player-character {
-            position: absolute;
-            font-size: 3rem;
-            transition: all 0.1s ease;
-            z-index: 50;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
-        }
-
-        /* EMERGENCIES */
-        .emergency-event {
-            position: absolute;
-            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #fff;
-            cursor: pointer;
-            animation: pulse 1s infinite;
-            text-align: center;
-            min-width: 120px;
-            z-index: 75;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* MINIGAME */
-        #actionMinigame {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             background: rgba(0,0,0,0.9);
-            padding: 20px;
-            border-radius: 15px;
-            border: 3px solid #ff6b6b;
-            z-index: 1000;
-            min-width: 300px;
-            text-align: center;
-        }
-
-        .minigame-tools {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .minigame-tool {
-            background: #4ecdc4;
-            border: none;
+            border: 2px solid #ff6b6b;
             border-radius: 10px;
-            padding: 10px;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            backdrop-filter: blur(10px);
         }
 
-        .minigame-tool:hover {
+        .tool-btn {
+            width: 60px;
+            height: 60px;
+            background: #1a1a2e;
+            border: 2px solid #4ecdc4;
+            border-radius: 8px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            pointer-events: all;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-btn:hover {
+            border-color: #ff6b6b;
             transform: scale(1.1);
-            background: #ff6b6b;
+            background: #2a2a3e;
         }
 
-        /* BUTTONS */
-        .btn {
-            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
-            border: none;
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: bold;
-            border: 2px solid white;
+        .tool-btn.active {
+            border-color: #ffd93d;
+            background: #2a2a3e;
+            box-shadow: 0 0 15px #ffd93d;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4ecdc4, #2ecc71);
-        }
-
-        /* MESSAGES */
-        .game-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px 40px;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            z-index: 1001;
-            border: 3px solid white;
-            animation: messagePop 0.3s ease-out;
-        }
-
-        @keyframes messagePop {
-            0% { transform: translate(-50%, -50%) scale(0); }
-            100% { transform: translate(-50%, -50%) scale(1); }
-        }
-
-        .message-success {
-            background: #4ecdc4;
-            color: white;
-        }
-
-        .message-error {
-            background: #ff6b6b;
-            color: white;
-        }
-
-        /* CITY ELEMENTS */
-        .city-element {
+        .vital-signs {
             position: absolute;
-            background: rgba(255,255,255,0.1);
-            border-radius: 5px;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 200px;
+            backdrop-filter: blur(10px);
         }
 
-        .building {
-            background: #34495e;
-            border: 1px solid #ecf0f1;
+        .vital-bar {
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            margin: 5px 0;
+            overflow: hidden;
+            position: relative;
         }
 
-        .hospital {
-            background: #e74c3c;
-            border: 2px solid #fff;
+        .vital-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
         }
 
-        .road {
-            background: #2c3e50;
-            border: 1px dashed #ecf0f1;
+        .heart-rate { background: linear-gradient(90deg, #ff6b6b, #ff8e8e); }
+        .blood-pressure { background: linear-gradient(90deg, #4ecdc4, #6bcba9); }
+        .oxygen { background: linear-gradient(90deg, #ffd93d, #ff9a3d); }
+
+        .blood-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,0,0,0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
     </style>
 </head>
 <body>
-    <!-- CHARACTER SELECTION -->
-    <div id="characterSelection" class="screen active">
-        <h1 style="font-size: 3rem; color: #ff6b6b; margin-bottom: 10px;">🐾 ANIMAL ER 🐾</h1>
-        <p style="font-size: 1.2rem; color: #4ecdc4; margin-bottom: 30px;">Scegli il tuo eroe medico!</p>
-        
-        <div class="characters-grid">
-            <div class="character-card" onclick="selectCharacter('cat')">
-                <div class="character-emoji">🐱</div>
-                <div class="character-name">Dott. Whiskers</div>
-                <div class="character-stats">
-                    <div class="stat">⚡ Velocità</div>
-                    <div class="stat">🎯 Precisione</div>
-                </div>
-                <p style="font-size: 0.9rem; margin-top: 10px;">Ex chirurgo veterinario</p>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="uiOverlay">
+            <div class="debug-info">
+                <div>FPS: <span id="fpsCounter">0</span></div>
+                <div>Triangles: <span id="triangleCount">0</span></div>
+                <div>Blood Particles: <span id="particleCount">0</span></div>
             </div>
 
-            <div class="character-card" onclick="selectCharacter('dog')">
-                <div class="character-emoji">🐶</div>
-                <div class="character-name">Medic Woof</div>
-                <div class="character-stats">
-                    <div class="stat">💪 Forza</div>
-                    <div class="stat">🛡️ Resistenza</div>
+            <div class="vital-signs">
+                <h3>VITAL SIGNS</h3>
+                <div>Heart Rate: <span id="heartRate">80</span> BPM</div>
+                <div class="vital-bar">
+                    <div class="vital-fill heart-rate" style="width: 80%;"></div>
                 </div>
-                <p style="font-size: 0.9rem; margin-top: 10px;">Ex cane da soccorso</p>
-            </div>
-
-            <div class="character-card" onclick="selectCharacter('rabbit')">
-                <div class="character-emoji">🐰</div>
-                <div class="character-name">Nurse Hops</div>
-                <div class="character-stats">
-                    <div class="stat">🚀 Rapidità</div>
-                    <div class="stat">🧠 Intelligenza</div>
+                <div>Blood Pressure: <span id="bloodPressure">120/80</span></div>
+                <div class="vital-bar">
+                    <div class="vital-fill blood-pressure" style="width: 75%;"></div>
                 </div>
-                <p style="font-size: 0.9rem; margin-top: 10px;">Ex laboratorio</p>
-            </div>
-        </div>
-
-        <button id="startGameBtn" class="btn" onclick="startGame()" disabled>
-            🚀 INIZIA MISSIONE
-        </button>
-    </div>
-
-    <!-- GAME SCREEN -->
-    <div id="gameScreen" class="screen hidden">
-        <div class="game-header">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div id="currentCharacterEmoji" style="font-size: 2rem;">🐱</div>
-                <div>
-                    <div id="currentCharacterName" style="font-weight: bold; color: #4ecdc4;">Dott. Whiskers</div>
-                    <div style="font-size: 0.8rem; color: #ccc;">Livello 1</div>
+                <div>Oxygen: <span id="oxygenLevel">98</span>%</div>
+                <div class="vital-bar">
+                    <div class="vital-fill oxygen" style="width: 98%;"></div>
                 </div>
             </div>
-            
-            <div class="game-ui">
-                <div class="ui-box">⏱️ <span id="gameTimer">300</span>s</div>
-                <div class="ui-box">💰 <span id="gameScore">0</span></div>
-                <div class="ui-box">🏥 <span id="patientsSaved">0</span></div>
+
+            <div class="medical-ui">
+                <div class="tool-btn" data-tool="tourniquet">🩹</div>
+                <div class="tool-btn" data-tool="defibrillator">⚡</div>
+                <div class="tool-btn" data-tool="oxygen">💨</div>
+                <div class="tool-btn" data-tool="injection">💉</div>
+                <div class="tool-btn" data-tool="bandage">🩸</div>
+                <div class="tool-btn" data-tool="surgery">🔪</div>
             </div>
 
-            <button class="btn btn-primary" onclick="showCharacterSelection()">
-                🔄 Cambia
-            </button>
-        </div>
-
-        <div id="gameWorld">
-            <div id="ambulance"></div>
-            <!-- Gli elementi della città e le emergenze vengono aggiunti qui -->
+            <div class="blood-overlay" id="bloodOverlay"></div>
         </div>
     </div>
 
     <script>
-        // ==================== GAME DATA ====================
-        const characters = {
-            cat: {
-                name: "Dott. Whiskers",
-                emoji: "🐱",
-                speed: 8,
-                color: "#ff9a3d"
-            },
-            dog: {
-                name: "Medic Woof",
-                emoji: "🐶", 
-                speed: 6,
-                color: "#4ecdc4"
-            },
-            rabbit: {
-                name: "Nurse Hops",
-                emoji: "🐰",
-                speed: 9,
-                color: "#ff6b6b"
-            }
-        };
-
-        const emergencies = [
-            {
-                type: "cardiac_arrest",
-                name: "Arresto Cardiaco",
-                emoji: "💔",
-                description: "Paziente incosciente!",
-                tools: ["defibrillator", "oxygen_mask", "cpr"],
-                points: 100
-            },
-            {
-                type: "bleeding", 
-                name: "Emorragia",
-                emoji: "🩸",
-                description: "Sanguinamento grave!",
-                tools: ["tourniquet", "bandage", "pressure"],
-                points: 75
-            },
-            {
-                type: "fracture",
-                name: "Frattura",
-                emoji: "🦴",
-                description: "Osso rotto!",
-                tools: ["splint", "bandage", "pain_relief"],
-                points: 50
-            }
-        ];
-
-        const tools = {
-            defibrillator: { emoji: "⚡", name: "Defibrillatore" },
-            oxygen_mask: { emoji: "💨", name: "Ossigeno" },
-            cpr: { emoji: "💓", name: "RCP" },
-            tourniquet: { emoji: "🩹", name: "Laccio" },
-            bandage: { emoji: "🩹", name: "Benda" },
-            pressure: { emoji: "✋", name: "Pressione" },
-            splint: { emoji: "🦴", name: "Stecca" },
-            pain_relief: { emoji: "💊", name: "Antidolorifico" }
-        };
-
-        // ==================== GAME STATE ====================
-        let gameState = {
-            currentCharacter: null,
-            score: 0,
-            timeLeft: 300,
-            patientsSaved: 0,
-            gameActive: false,
-            playerPosition: { x: 400, y: 300 },
-            ambulancePosition: { x: 100, y: 100 },
-            currentEmergency: null,
-            gameInterval: null,
-            isInAmbulance: false
-        };
-
-        // ==================== DOM ELEMENTS ====================
-        const elements = {
-            characterSelection: document.getElementById('characterSelection'),
-            gameScreen: document.getElementById('gameScreen'),
-            gameWorld: document.getElementById('gameWorld'),
-            startGameBtn: document.getElementById('startGameBtn'),
-            currentCharacterEmoji: document.getElementById('currentCharacterEmoji'),
-            currentCharacterName: document.getElementById('currentCharacterName'),
-            gameTimer: document.getElementById('gameTimer'),
-            gameScore: document.getElementById('gameScore'),
-            patientsSaved: document.getElementById('patientsSaved'),
-            ambulance: document.getElementById('ambulance')
-        };
-
-        // ==================== CHARACTER SELECTION ====================
-        function selectCharacter(characterId) {
-            // Rimuovi selezione da tutte le carte
-            document.querySelectorAll('.character-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-
-            // Aggiungi selezione alla carta cliccata
-            event.currentTarget.classList.add('selected');
-            
-            // Abilita il pulsante di inizio
-            elements.startGameBtn.disabled = false;
-            gameState.currentCharacter = characterId;
-        }
-
-        function startGame() {
-            if (!gameState.currentCharacter) {
-                alert("Seleziona prima un personaggio!");
-                return;
-            }
-
-            // Cambia schermata
-            elements.characterSelection.classList.remove('active');
-            elements.characterSelection.classList.add('hidden');
-            elements.gameScreen.classList.remove('hidden');
-            elements.gameScreen.classList.add('active');
-
-            // Aggiorna UI con informazioni del personaggio
-            const character = characters[gameState.currentCharacter];
-            elements.currentCharacterEmoji.textContent = character.emoji;
-            elements.currentCharacterName.textContent = character.name;
-
-            // Inizializza il gioco
-            initializeGame();
-        }
-
-        function showCharacterSelection() {
-            // Torna alla selezione personaggi
-            elements.gameScreen.classList.remove('active');
-            elements.gameScreen.classList.add('hidden');
-            elements.characterSelection.classList.remove('hidden');
-            elements.characterSelection.classList.add('active');
-
-            // Ferma il gioco
-            stopGame();
-        }
-
-        // ==================== GAME ENGINE ====================
-        function initializeGame() {
-            gameState.score = 0;
-            gameState.timeLeft = 300;
-            gameState.patientsSaved = 0;
-            gameState.gameActive = true;
-            gameState.playerPosition = { x: 400, y: 300 };
-            gameState.ambulancePosition = { x: 100, y: 100 };
-
-            updateUI();
-            createPlayerCharacter();
-            positionAmbulance();
-            createCity();
-            spawnEmergencies();
-            startGameTimer();
-        }
-
-        function stopGame() {
-            gameState.gameActive = false;
-            clearInterval(gameState.gameInterval);
-            elements.gameWorld.innerHTML = '<div id="ambulance"></div>';
-        }
-
-        function createPlayerCharacter() {
-            const player = document.createElement('div');
-            player.className = 'player-character';
-            player.id = 'player';
-            player.textContent = characters[gameState.currentCharacter].emoji;
-            player.style.left = gameState.playerPosition.x + 'px';
-            player.style.top = gameState.playerPosition.y + 'px';
-            player.style.color = characters[gameState.currentCharacter].color;
-            
-            elements.gameWorld.appendChild(player);
-        }
-
-        function positionAmbulance() {
-            elements.ambulance.style.left = gameState.ambulancePosition.x + 'px';
-            elements.ambulance.style.top = gameState.ambulancePosition.y + 'px';
-        }
-
-        function createCity() {
-            // Aggiungi edifici
-            const buildings = [
-                { type: 'building', width: 150, height: 200, left: 50, top: 100 },
-                { type: 'building', width: 120, height: 180, left: 250, top: 120 },
-                { type: 'hospital', width: 180, height: 150, left: 500, top: 150 },
-                { type: 'road', width: 600, height: 60, left: 50, top: 400 },
-                { type: 'road', width: 60, height: 300, left: 650, top: 200 }
-            ];
-
-            buildings.forEach(building => {
-                const element = document.createElement('div');
-                element.className = `city-element ${building.type}`;
-                element.style.width = building.width + 'px';
-                element.style.height = building.height + 'px';
-                element.style.left = building.left + 'px';
-                element.style.top = building.top + 'px';
+        // ==================== ENGINE CORE ====================
+        class TraumaEngine {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d', { alpha: false });
+                this.glowCanvas = document.createElement('canvas');
+                this.glowCtx = this.glowCanvas.getContext('2d');
                 
-                if (building.type === 'hospital') {
-                    element.innerHTML = '🏥';
-                    element.style.display = 'flex';
-                    element.style.alignItems = 'center';
-                    element.style.justifyContent = 'center';
-                    element.style.fontSize = '2rem';
+                this.particles = [];
+                this.bloodStains = [];
+                this.lights = [];
+                this.patientState = {
+                    heartRate: 80,
+                    bloodPressure: { systolic: 120, diastolic: 80 },
+                    oxygen: 98,
+                    bleeding: 0,
+                    pain: 0
+                };
+                
+                this.currentTool = null;
+                this.mouse = { x: 0, y: 0, down: false };
+                
+                this.resize();
+                this.initShaders();
+                this.createScene();
+                this.setupEventListeners();
+                this.gameLoop();
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                this.glowCanvas.width = this.canvas.width;
+                this.glowCanvas.height = this.canvas.height;
+            }
+
+            initShaders() {
+                // Blood shader simulation
+                this.bloodTexture = this.createBloodTexture();
+            }
+
+            createBloodTexture() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 256;
+                canvas.height = 256;
+                
+                // Create organic blood pattern
+                const gradient = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+                gradient.addColorStop(0, 'rgba(200, 0, 0, 0.8)');
+                gradient.addColorStop(0.7, 'rgba(120, 0, 0, 0.4)');
+                gradient.addColorStop(1, 'rgba(80, 0, 0, 0)');
+                
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 256, 256);
+                
+                return canvas;
+            }
+
+            createScene() {
+                // Create initial blood particles
+                for (let i = 0; i < 50; i++) {
+                    this.particles.push(this.createBloodParticle());
                 }
-                
-                elements.gameWorld.appendChild(element);
-            });
-        }
 
-        function spawnEmergencies() {
-            // Rimuovi emergenze esistenti
-            document.querySelectorAll('.emergency-event').forEach(event => event.remove());
-
-            // Genera 3 emergenze casuali
-            for (let i = 0; i < 3; i++) {
-                setTimeout(() => {
-                    if (!gameState.gameActive) return;
-                    
-                    const emergency = emergencies[Math.floor(Math.random() * emergencies.length)];
-                    spawnEmergency(emergency);
-                }, i * 10000);
-            }
-        }
-
-        function spawnEmergency(emergency) {
-            const eventElement = document.createElement('div');
-            eventElement.className = 'emergency-event';
-            eventElement.innerHTML = `
-                <div style="font-size: 2rem;">${emergency.emoji}</div>
-                <div style="font-weight: bold;">${emergency.name}</div>
-                <div style="font-size: 0.8rem;">${emergency.description}</div>
-            `;
-
-            // Posizione casuale
-            const x = 100 + Math.random() * (window.innerWidth - 300);
-            const y = 100 + Math.random() * (window.innerHeight - 300);
-            
-            eventElement.style.left = x + 'px';
-            eventElement.style.top = y + 'px';
-            eventElement.dataset.emergencyType = emergency.type;
-
-            eventElement.addEventListener('click', () => startMinigame(emergency));
-
-            elements.gameWorld.appendChild(eventElement);
-
-            // Rimuovi dopo 30 secondi se non trattata
-            setTimeout(() => {
-                if (eventElement.parentElement) {
-                    eventElement.remove();
-                }
-            }, 30000);
-        }
-
-        function startMinigame(emergency) {
-            gameState.currentEmergency = emergency;
-
-            const minigame = document.createElement('div');
-            minigame.id = 'actionMinigame';
-            minigame.innerHTML = `
-                <h2>${emergency.emoji} ${emergency.name}</h2>
-                <p>${emergency.description}</p>
-                <p style="color: #4ecdc4; margin: 10px 0;">Scegli lo strumento corretto:</p>
-                
-                <div class="minigame-tools">
-                    ${emergency.tools.map(tool => `
-                        <button class="minigame-tool" onclick="useTool('${tool}')">
-                            ${tools[tool].emoji}<br>
-                            <small>${tools[tool].name}</small>
-                        </button>
-                    `).join('')}
-                </div>
-                
-                <button class="btn" onclick="closeMinigame()" style="margin-top: 10px;">
-                    ❌ Annulla
-                </button>
-            `;
-
-            elements.gameWorld.appendChild(minigame);
-        }
-
-        function useTool(toolId) {
-            const emergency = gameState.currentEmergency;
-            const correctTool = emergency.tools[0]; // Primo strumento è sempre corretto
-            
-            if (toolId === correctTool) {
-                // SUCCESSO
-                gameState.score += emergency.points;
-                gameState.patientsSaved++;
-                showMessage(`✅ Successo! +${emergency.points} punti`, "success");
-                
-                // Rimuovi l'evento di emergenza
-                document.querySelectorAll('.emergency-event').forEach(event => {
-                    if (event.dataset.emergencyType === emergency.type) {
-                        event.remove();
-                    }
+                // Add dynamic lighting
+                this.lights.push({
+                    x: this.canvas.width / 2,
+                    y: this.canvas.height / 2,
+                    radius: 300,
+                    intensity: 0.8,
+                    color: '#4ecdc4'
                 });
-            } else {
-                // FALLIMENTO
-                gameState.timeLeft = Math.max(30, gameState.timeLeft - 30);
-                showMessage(`❌ Strumento sbagliato! -30s`, "error");
             }
 
-            closeMinigame();
-            updateUI();
-        }
-
-        function closeMinigame() {
-            const minigame = document.getElementById('actionMinigame');
-            if (minigame) minigame.remove();
-            gameState.currentEmergency = null;
-        }
-
-        function showMessage(text, type) {
-            const message = document.createElement('div');
-            message.className = `game-message message-${type}`;
-            message.textContent = text;
-            
-            document.body.appendChild(message);
-            
-            setTimeout(() => {
-                message.remove();
-            }, 2000);
-        }
-
-        // ==================== GAME TIMER ====================
-        function startGameTimer() {
-            gameState.gameInterval = setInterval(() => {
-                if (!gameState.gameActive) return;
-                
-                gameState.timeLeft--;
-                updateUI();
-                
-                if (gameState.timeLeft <= 0) {
-                    endGame();
-                }
-                
-                // Genera occasionalmente nuove emergenze
-                if (Math.random() < 0.01 && document.querySelectorAll('.emergency-event').length < 5) {
-                    const emergency = emergencies[Math.floor(Math.random() * emergencies.length)];
-                    spawnEmergency(emergency);
-                }
-            }, 1000);
-        }
-
-        function endGame() {
-            gameState.gameActive = false;
-            clearInterval(gameState.gameInterval);
-            
-            showMessage(`🎮 GAME OVER! Punteggio: ${gameState.score}`, "success");
-            
-            setTimeout(() => {
-                showCharacterSelection();
-            }, 3000);
-        }
-
-        function updateUI() {
-            elements.gameTimer.textContent = gameState.timeLeft;
-            elements.gameScore.textContent = gameState.score;
-            elements.patientsSaved.textContent = gameState.patientsSaved;
-        }
-
-        // ==================== MOVIMENTO ====================
-        document.addEventListener('keydown', (e) => {
-            if (!gameState.gameActive) return;
-            
-            const player = document.getElementById('player');
-            if (!player) return;
-            
-            const speed = characters[gameState.currentCharacter].speed;
-            let newX = gameState.playerPosition.x;
-            let newY = gameState.playerPosition.y;
-            
-            switch(e.key.toLowerCase()) {
-                case 'w':
-                case 'arrowup':
-                    newY -= speed;
-                    break;
-                case 's':
-                case 'arrowdown':
-                    newY += speed;
-                    break;
-                case 'a':
-                case 'arrowleft':
-                    newX -= speed;
-                    break;
-                case 'd':
-                case 'arrowright':
-                    newX += speed;
-                    break;
+            createBloodParticle() {
+                return {
+                    x: Math.random() * this.canvas.width,
+                    y: Math.random() * this.canvas.height,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: (Math.random() - 0.5) * 4,
+                    radius: Math.random() * 8 + 2,
+                    life: 1,
+                    decay: Math.random() * 0.02 + 0.01,
+                    color: `rgba(200, ${Math.random() * 30}, ${Math.random() * 20}, 0.8)`
+                };
             }
-            
-            // Controllo dei bordi
-            newX = Math.max(20, Math.min(window.innerWidth - 80, newX));
-            newY = Math.max(20, Math.min(window.innerHeight - 80, newY));
-            
-            gameState.playerPosition.x = newX;
-            gameState.playerPosition.y = newY;
-            
-            player.style.left = newX + 'px';
-            player.style.top = newY + 'px';
-        });
 
-        // ==================== INIZIALIZZAZIONE ====================
-        console.log('🐾 ANIMAL ER - Gioco caricato!');
+            setupEventListeners() {
+                window.addEventListener('resize', () => this.resize());
+                
+                this.canvas.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+
+                this.canvas.addEventListener('mousedown', () => {
+                    this.mouse.down = true;
+                    this.useCurrentTool();
+                });
+
+                this.canvas.addEventListener('mouseup', () => {
+                    this.mouse.down = false;
+                });
+
+                // Tool selection
+                document.querySelectorAll('.tool-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.currentTool = e.target.dataset.tool;
+                    });
+                });
+            }
+
+            useCurrentTool() {
+                if (!this.currentTool) return;
+
+                switch(this.currentTool) {
+                    case 'tourniquet':
+                        this.applyTourniquet();
+                        break;
+                    case 'defibrillator':
+                        this.defibrillate();
+                        break;
+                    case 'oxygen':
+                        this.administerOxygen();
+                        break;
+                    case 'injection':
+                        this.giveInjection();
+                        break;
+                }
+            }
+
+            applyTourniquet() {
+                // Create blood spray effect
+                for (let i = 0; i < 20; i++) {
+                    this.particles.push({
+                        x: this.mouse.x,
+                        y: this.mouse.y,
+                        vx: (Math.random() - 0.5) * 10,
+                        vy: (Math.random() - 0.5) * 10,
+                        radius: Math.random() * 6 + 2,
+                        life: 1,
+                        decay: Math.random() * 0.03 + 0.02,
+                        color: `rgba(180, ${Math.random() * 20}, ${Math.random() * 10}, 0.9)`
+                    });
+                }
+
+                // Update patient state
+                this.patientState.bleeding = Math.max(0, this.patientState.bleeding - 0.3);
+                this.updateVitalSigns();
+            }
+
+            defibrillate() {
+                // Flash effect
+                this.lights.push({
+                    x: this.mouse.x,
+                    y: this.mouse.y,
+                    radius: 500,
+                    intensity: 1,
+                    color: '#ffffff',
+                    decay: 0.1
+                });
+
+                // Heart rate change
+                this.patientState.heartRate = Math.max(40, this.patientState.heartRate - 20 + Math.random() * 40);
+                this.updateVitalSigns();
+            }
+
+            administerOxygen() {
+                this.patientState.oxygen = Math.min(100, this.patientState.oxygen + 5);
+                this.updateVitalSigns();
+            }
+
+            giveInjection() {
+                // Create small blood spot
+                this.bloodStains.push({
+                    x: this.mouse.x,
+                    y: this.mouse.y,
+                    radius: 15,
+                    opacity: 0.8
+                });
+
+                this.patientState.pain = Math.max(0, this.patientState.pain - 0.2);
+                this.updateVitalSigns();
+            }
+
+            updateVitalSigns() {
+                document.getElementById('heartRate').textContent = Math.round(this.patientState.heartRate);
+                document.getElementById('bloodPressure').textContent = 
+                    `${Math.round(this.patientState.bloodPressure.systolic)}/${Math.round(this.patientState.bloodPressure.diastolic)}`;
+                document.getElementById('oxygenLevel').textContent = Math.round(this.patientState.oxygen);
+
+                // Update UI bars
+                document.querySelector('.heart-rate').style.width = `${this.patientState.heartRate}%`;
+                document.querySelector('.blood-pressure').style.width = `${(this.patientState.bloodPressure.systolic / 200) * 100}%`;
+                document.querySelector('.oxygen').style.width = `${this.patientState.oxygen}%`;
+
+                // Blood overlay intensity
+                const bloodIntensity = this.patientState.bleeding;
+                document.getElementById('bloodOverlay').style.opacity = bloodIntensity;
+            }
+
+            updateParticles() {
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const p = this.particles[i];
+                    
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.1; // Gravity
+                    p.life -= p.decay;
+                    
+                    if (p.life <= 0 || p.y > this.canvas.height) {
+                        this.particles.splice(i, 1);
+                        
+                        // Leave blood stain
+                        if (Math.random() < 0.3) {
+                            this.bloodStains.push({
+                                x: p.x,
+                                y: p.y,
+                                radius: p.radius * 0.5,
+                                opacity: p.life * 0.8
+                            });
+                        }
+                    }
+                }
+
+                // Add new blood particles if bleeding
+                if (this.patientState.bleeding > 0 && Math.random() < this.patientState.bleeding) {
+                    this.particles.push(this.createBloodParticle());
+                }
+            }
+
+            updateLights() {
+                for (let i = this.lights.length - 1; i >= 0; i--) {
+                    const light = this.lights[i];
+                    if (light.decay) {
+                        light.intensity -= light.decay;
+                        if (light.intensity <= 0) {
+                            this.lights.splice(i, 1);
+                        }
+                    }
+                }
+            }
+
+            render() {
+                // Clear with dark medical room color
+                this.ctx.fillStyle = '#0a0a1a';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Render blood stains first
+                this.renderBloodStains();
+
+                // Render patient body (simplified silhouette)
+                this.renderPatient();
+
+                // Render particles
+                this.renderParticles();
+
+                // Render lighting effects
+                this.renderLights();
+
+                // Render tool cursor
+                this.renderCursor();
+            }
+
+            renderBloodStains() {
+                this.bloodStains.forEach(stain => {
+                    this.ctx.save();
+                    this.ctx.globalAlpha = stain.opacity;
+                    
+                    const gradient = this.ctx.createRadialGradient(
+                        stain.x, stain.y, 0,
+                        stain.x, stain.y, stain.radius
+                    );
+                    gradient.addColorStop(0, 'rgba(120, 0, 0, 0.8)');
+                    gradient.addColorStop(1, 'rgba(60, 0, 0, 0)');
+                    
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.fillRect(
+                        stain.x - stain.radius,
+                        stain.y - stain.radius,
+                        stain.radius * 2,
+                        stain.radius * 2
+                    );
+                    
+                    this.ctx.restore();
+                });
+            }
+
+            renderPatient() {
+                const centerX = this.canvas.width / 2;
+                const centerY = this.canvas.height / 2;
+                
+                // Body silhouette
+                this.ctx.fillStyle = '#2a2a3a';
+                this.ctx.beginPath();
+                this.ctx.ellipse(centerX, centerY - 50, 80, 120, 0, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Wound areas based on bleeding
+                if (this.patientState.bleeding > 0) {
+                    this.ctx.fillStyle = `rgba(150, 0, 0, ${this.patientState.bleeding})`;
+                    this.ctx.beginPath();
+                    this.ctx.arc(centerX + 40, centerY - 20, 25, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+            }
+
+            renderParticles() {
+                this.particles.forEach(p => {
+                    this.ctx.save();
+                    this.ctx.globalAlpha = p.life;
+                    
+                    const gradient = this.ctx.createRadialGradient(
+                        p.x, p.y, 0,
+                        p.x, p.y, p.radius
+                    );
+                    gradient.addColorStop(0, p.color);
+                    gradient.addColorStop(1, 'rgba(80, 0, 0, 0)');
+                    
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.fillRect(
+                        p.x - p.radius,
+                        p.y - p.radius,
+                        p.radius * 2,
+                        p.radius * 2
+                    );
+                    
+                    this.ctx.restore();
+                });
+            }
+
+            renderLights() {
+                this.lights.forEach(light => {
+                    this.ctx.save();
+                    
+                    const gradient = this.ctx.createRadialGradient(
+                        light.x, light.y, 0,
+                        light.x, light.y, light.radius
+                    );
+                    gradient.addColorStop(0, `${light.color}${Math.floor(light.intensity * 255).toString(16).padStart(2, '0')}`);
+                    gradient.addColorStop(1, '#00000000');
+                    
+                    this.ctx.globalCompositeOperation = 'lighter';
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.fillRect(
+                        light.x - light.radius,
+                        light.y - light.radius,
+                        light.radius * 2,
+                        light.radius * 2
+                    );
+                    
+                    this.ctx.restore();
+                });
+            }
+
+            renderCursor() {
+                if (!this.currentTool) return;
+
+                this.ctx.save();
+                this.ctx.strokeStyle = '#ffd93d';
+                this.ctx.lineWidth = 2;
+                this.ctx.setLineDash([5, 5]);
+                this.ctx.beginPath();
+                this.ctx.arc(this.mouse.x, this.mouse.y, 30, 0, Math.PI * 2);
+                this.ctx.stroke();
+                this.ctx.restore();
+            }
+
+            gameLoop() {
+                this.updateParticles();
+                this.updateLights();
+                this.render();
+
+                // Update debug info
+                document.getElementById('particleCount').textContent = this.particles.length;
+                document.getElementById('triangleCount').textContent = this.particles.length + this.bloodStains.length;
+
+                requestAnimationFrame(() => this.gameLoop());
+            }
+        }
+
+        // ==================== INITIALIZATION ====================
+        let engine;
+
+        function init() {
+            engine = new TraumaEngine();
+            
+            // Start with some bleeding
+            engine.patientState.bleeding = 0.7;
+            engine.updateVitalSigns();
+        }
+
+        // Start when page loads
+        window.addEventListener('load', init);
+
+        // FPS counter
+        let frameCount = 0;
+        let lastTime = performance.now();
+        function updateFPS() {
+            frameCount++;
+            const currentTime = performance.now();
+            if (currentTime - lastTime >= 1000) {
+                document.getElementById('fpsCounter').textContent = frameCount;
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+            requestAnimationFrame(updateFPS);
+        }
+        updateFPS();
     </script>
 </body>
 </html>
