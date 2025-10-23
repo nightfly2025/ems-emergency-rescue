@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANIMAL ER - EMS Open World AVANZATO</title>
+    <title>ANIMAL ER - EMS Open World</title>
     <style>
         * {
             margin: 0;
@@ -12,11 +12,10 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
             background: #000;
             color: white;
             overflow: hidden;
-            min-height: 100vh;
         }
 
         /* SCREEN MANAGER */
@@ -26,20 +25,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            transition: transform 0.5s ease;
+            transition: opacity 0.5s ease;
         }
 
         .hidden {
-            transform: translateX(-100%);
+            display: none;
         }
 
         .active {
-            transform: translateX(0);
+            display: block;
         }
 
-        /* CHARACTER SELECTION - MIGLIORATO */
+        /* CHARACTER SELECTION */
         #characterSelection {
-            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -49,565 +48,391 @@
 
         .characters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            width: 100%;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
             margin: 30px 0;
         }
 
         .character-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
             text-align: center;
             border: 3px solid transparent;
-            transition: all 0.3s ease;
             cursor: pointer;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .character-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .character-card:hover::before {
-            left: 100%;
+            transition: all 0.3s ease;
         }
 
         .character-card:hover {
-            transform: translateY(-10px) scale(1.05);
+            transform: scale(1.05);
             border-color: #4ecdc4;
-            box-shadow: 0 20px 40px rgba(78, 205, 196, 0.4);
         }
 
         .character-card.selected {
             border-color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.2);
-            transform: scale(1.05);
+            background: rgba(255,107,107,0.2);
         }
 
         .character-emoji {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-            transition: all 0.3s ease;
-        }
-
-        .character-card:hover .character-emoji {
-            transform: scale(1.2) rotate(5deg);
+            font-size: 4rem;
+            margin-bottom: 10px;
         }
 
         .character-name {
-            font-size: 1.8rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 15px;
             color: #4ecdc4;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
         }
 
         .character-stats {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
+            gap: 10px;
+            margin: 10px 0;
         }
 
         .stat {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 1rem;
-            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
         }
 
-        /* GAME SCREEN - RIVOLUZIONATO */
+        /* GAME SCREEN */
         #gameScreen {
-            background: #000;
+            background: #1a1a2e;
         }
 
         .game-header {
-            background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(255,107,107,0.2));
-            padding: 15px 30px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #ff6b6b;
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 1000;
+            border-bottom: 2px solid #ff6b6b;
         }
 
         .game-ui {
             display: flex;
-            gap: 25px;
+            gap: 15px;
         }
 
         .ui-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            padding: 12px 25px;
-            border-radius: 15px;
-            border: 2px solid #4ecdc4;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid #4ecdc4;
         }
 
-        /* GAME WORLD - COMPLETAMENTE RIVISTO */
+        /* GAME WORLD */
         #gameWorld {
             width: 100%;
-            height: calc(100vh - 80px);
+            height: calc(100vh - 60px);
             position: relative;
-            background: 
-                linear-gradient(135deg, #2c3e50 0%, #3498db 100%),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%232c3e50"/><path d="M0 0L100 100M100 0L0 100" stroke="%233498db" stroke-width="0.5"/></svg>');
+            background: linear-gradient(135deg, #2c3e50, #3498db);
             overflow: hidden;
-            cursor: none;
         }
 
-        /* CITTÀ DINAMICA */
-        .city-element {
-            position: absolute;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-        }
-
-        .building {
-            background: linear-gradient(135deg, #34495e, #2c3e50);
-            border: 2px solid #ecf0f1;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .road {
-            background: #2c3e50;
-            border: 2px dashed #ecf0f1;
-        }
-
-        .hospital {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            border: 3px solid #fff;
-            box-shadow: 0 0 30px rgba(231, 76, 60, 0.5);
-        }
-
-        /* AMBULANCE - NUOVA! */
+        /* AMBULANCE */
         #ambulance {
             position: absolute;
-            width: 120px;
-            height: 60px;
+            width: 100px;
+            height: 50px;
             background: linear-gradient(135deg, #e74c3c, #c0392b);
-            border-radius: 10px;
-            border: 3px solid #fff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            border: 2px solid #fff;
             transition: all 0.1s ease;
-            z-index: 500;
+            z-index: 100;
         }
 
         #ambulance::before {
             content: '🚑';
             position: absolute;
-            top: -30px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 2rem;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+            font-size: 1.5rem;
         }
 
-        #ambulance::after {
-            content: 'AMBULANCE';
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-weight: bold;
-            font-size: 0.8rem;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
-
-        /* PLAYER CHARACTER - MIGLIORATO */
+        /* PLAYER */
         .player-character {
             position: absolute;
-            font-size: 3.5rem;
-            transition: all 0.15s ease;
-            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6));
-            z-index: 100;
-            text-shadow: 0 0 20px currentColor;
-            animation: float 3s ease-in-out infinite;
+            font-size: 3rem;
+            transition: all 0.1s ease;
+            z-index: 50;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(2deg); }
-        }
-
-        /* EMERGENZE - MOLTO PIÙ VISIBILI */
+        /* EMERGENCIES */
         .emergency-event {
             position: absolute;
-            background: linear-gradient(135deg, rgba(255,107,107,0.95), rgba(231,76,60,0.95));
-            padding: 20px;
-            border-radius: 20px;
-            border: 4px solid #fff;
+            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #fff;
             cursor: pointer;
-            animation: emergencyPulse 1.5s infinite, shake 0.5s infinite;
+            animation: pulse 1s infinite;
             text-align: center;
-            min-width: 150px;
-            box-shadow: 
-                0 10px 30px rgba(255,107,107,0.5),
-                0 0 50px rgba(255,107,107,0.8);
-            z-index: 200;
-            backdrop-filter: blur(10px);
+            min-width: 120px;
+            z-index: 75;
         }
 
-        @keyframes emergencyPulse {
-            0%, 100% { 
-                transform: scale(1);
-                box-shadow: 0 10px 30px rgba(255,107,107,0.5);
-            }
-            50% { 
-                transform: scale(1.1);
-                box-shadow: 0 15px 40px rgba(255,107,107,0.8);
-            }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0) rotate(0deg); }
-            25% { transform: translateX(-2px) rotate(-1deg); }
-            75% { transform: translateX(2px) rotate(1deg); }
-        }
-
-        /* EFFETTI VISIVI */
-        .siren-effect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, transparent 50%, rgba(255,0,0,0.1) 100%);
-            animation: siren 2s linear infinite;
-            pointer-events: none;
-            z-index: 50;
-        }
-
-        @keyframes siren {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
-        }
-
-        /* MINIGAME - RIVISTO */
+        /* MINIGAME */
         #actionMinigame {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(26,26,46,0.98));
-            padding: 40px;
-            border-radius: 25px;
-            border: 4px solid #ff6b6b;
+            background: rgba(0,0,0,0.9);
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #ff6b6b;
             z-index: 1000;
-            min-width: 500px;
+            min-width: 300px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-            backdrop-filter: blur(20px);
         }
 
         .minigame-tools {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 30px 0;
+            gap: 10px;
+            margin: 15px 0;
         }
 
         .minigame-tool {
-            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            background: #4ecdc4;
             border: none;
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 10px;
             color: white;
-            font-size: 2.5rem;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 3px solid rgba(255,255,255,0.3);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
         }
 
         .minigame-tool:hover {
-            transform: scale(1.15) rotate(5deg);
-            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-            box-shadow: 0 15px 35px rgba(255,107,107,0.4);
+            transform: scale(1.1);
+            background: #ff6b6b;
         }
 
-        /* PULSANTI MIGLIORATI */
+        /* BUTTONS */
         .btn {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
             border: none;
-            padding: 18px 35px;
-            font-size: 1.3rem;
+            padding: 12px 25px;
+            font-size: 1.1rem;
             color: white;
-            border-radius: 30px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             font-weight: bold;
-            border: 3px solid white;
-            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            border: 2px solid white;
         }
 
         .btn:hover {
-            transform: scale(1.1);
-            background: linear-gradient(135deg, #ff8e8e, #ff6b6b);
-            box-shadow: 0 15px 40px rgba(255,107,107,0.5);
+            transform: scale(1.05);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4ecdc4, #44a08d);
-            box-shadow: 0 10px 30px rgba(78,205,196,0.3);
+            background: linear-gradient(135deg, #4ecdc4, #2ecc71);
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #44a08d, #4ecdc4);
-            box-shadow: 0 15px 40px rgba(78,205,196,0.5);
-        }
-
-        /* MESSAGGI ESPLOSIVI */
+        /* MESSAGES */
         .game-message {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            padding: 25px 50px;
-            border-radius: 20px;
+            padding: 20px 40px;
+            border-radius: 15px;
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             z-index: 1001;
-            border: 4px solid white;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            backdrop-filter: blur(20px);
-            animation: messagePop 0.5s ease-out;
+            border: 3px solid white;
+            animation: messagePop 0.3s ease-out;
         }
 
         @keyframes messagePop {
             0% { transform: translate(-50%, -50%) scale(0); }
-            70% { transform: translate(-50%, -50%) scale(1.1); }
             100% { transform: translate(-50%, -50%) scale(1); }
         }
 
         .message-success {
-            background: linear-gradient(135deg, rgba(78,205,196,0.9), rgba(68,160,141,0.9));
+            background: #4ecdc4;
             color: white;
         }
 
         .message-error {
-            background: linear-gradient(135deg, rgba(255,107,107,0.9), rgba(231,76,60,0.9));
+            background: #ff6b6b;
             color: white;
+        }
+
+        /* CITY ELEMENTS */
+        .city-element {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+
+        .building {
+            background: #34495e;
+            border: 1px solid #ecf0f1;
+        }
+
+        .hospital {
+            background: #e74c3c;
+            border: 2px solid #fff;
+        }
+
+        .road {
+            background: #2c3e50;
+            border: 1px dashed #ecf0f1;
         }
     </style>
 </head>
 <body>
-    <!-- CHARACTER SELECTION SCREEN -->
+    <!-- CHARACTER SELECTION -->
     <div id="characterSelection" class="screen active">
-        <h1 style="font-size: 4rem; margin-bottom: 20px; color: #ff6b6b; text-shadow: 0 5px 15px rgba(0,0,0,0.5);">🐾 ANIMAL ER 🐾</h1>
-        <p style="font-size: 1.8rem; margin-bottom: 40px; color: #4ecdc4;">Scegli il tuo eroe medico!</p>
+        <h1 style="font-size: 3rem; color: #ff6b6b; margin-bottom: 10px;">🐾 ANIMAL ER 🐾</h1>
+        <p style="font-size: 1.2rem; color: #4ecdc4; margin-bottom: 30px;">Scegli il tuo eroe medico!</p>
         
         <div class="characters-grid">
-            <!-- GATTO -->
             <div class="character-card" onclick="selectCharacter('cat')">
                 <div class="character-emoji">🐱</div>
                 <div class="character-name">Dott. Whiskers</div>
                 <div class="character-stats">
-                    <div class="stat">⚡ Velocità 8/10</div>
-                    <div class="stat">🎯 Precisione 9/10</div>
+                    <div class="stat">⚡ Velocità</div>
+                    <div class="stat">🎯 Precisione</div>
                 </div>
-                <p style="margin: 15px 0; font-size: 1.1rem;">Ex chirurgo veterinario, ora salva umani con agilità felina</p>
-                <div style="background: rgba(255,255,255,0.2); border-radius: 10px; height: 12px; margin: 15px 0;">
-                    <div style="background: linear-gradient(90deg, #4ecdc4, #ff6b6b); height: 100%; width: 80%; border-radius: 10px;"></div>
-                </div>
+                <p style="font-size: 0.9rem; margin-top: 10px;">Ex chirurgo veterinario</p>
             </div>
 
-            <!-- CANE -->
             <div class="character-card" onclick="selectCharacter('dog')">
                 <div class="character-emoji">🐶</div>
                 <div class="character-name">Medic Woof</div>
                 <div class="character-stats">
-                    <div class="stat">💪 Forza 9/10</div>
-                    <div class="stat">🛡️ Resistenza 8/10</div>
+                    <div class="stat">💪 Forza</div>
+                    <div class="stat">🛡️ Resistenza</div>
                 </div>
-                <p style="margin: 15px 0; font-size: 1.1rem;">Ex cane da soccorso, trasporta pazienti come fossero bastoni</p>
-                <div style="background: rgba(255,255,255,0.2); border-radius: 10px; height: 12px; margin: 15px 0;">
-                    <div style="background: linear-gradient(90deg, #4ecdc4, #ff6b6b); height: 100%; width: 90%; border-radius: 10px;"></div>
-                </div>
+                <p style="font-size: 0.9rem; margin-top: 10px;">Ex cane da soccorso</p>
             </div>
 
-            <!-- CONIGLIO -->
             <div class="character-card" onclick="selectCharacter('rabbit')">
                 <div class="character-emoji">🐰</div>
                 <div class="character-name">Nurse Hops</div>
                 <div class="character-stats">
-                    <div class="stat">🚀 Rapidità 9/10</div>
-                    <div class="stat">🧠 Intelligenza 8/10</div>
+                    <div class="stat">🚀 Rapidità</div>
+                    <div class="stat">🧠 Intelligenza</div>
                 </div>
-                <p style="margin: 15px 0; font-size: 1.1rem;">Ex laboratorio, conosce ogni farmaco e procedura</p>
-                <div style="background: rgba(255,255,255,0.2); border-radius: 10px; height: 12px; margin: 15px 0;">
-                    <div style="background: linear-gradient(90deg, #4ecdc4, #ff6b6b); height: 100%; width: 70%; border-radius: 10px;"></div>
-                </div>
+                <p style="font-size: 0.9rem; margin-top: 10px;">Ex laboratorio</p>
             </div>
         </div>
 
         <button id="startGameBtn" class="btn" onclick="startGame()" disabled>
-            🚀 INIZIA MISSIONE!
+            🚀 INIZIA MISSIONE
         </button>
     </div>
 
     <!-- GAME SCREEN -->
     <div id="gameScreen" class="screen hidden">
         <div class="game-header">
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <div id="currentCharacterEmoji" style="font-size: 2.5rem; filter: drop-shadow(0 3px 10px rgba(0,0,0,0.5));">🐱</div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div id="currentCharacterEmoji" style="font-size: 2rem;">🐱</div>
                 <div>
-                    <div id="currentCharacterName" style="font-weight: bold; color: #4ecdc4; font-size: 1.3rem;">Dott. Whiskers</div>
-                    <div style="font-size: 1rem; color: #ccc;">Livello 1 - Emergenza Cittadina</div>
+                    <div id="currentCharacterName" style="font-weight: bold; color: #4ecdc4;">Dott. Whiskers</div>
+                    <div style="font-size: 0.8rem; color: #ccc;">Livello 1</div>
                 </div>
             </div>
             
             <div class="game-ui">
-                <div class="ui-box">
-                    ⏱️ TEMPO: <span id="gameTimer" style="color: #ffd93d;">300</span>s
-                </div>
-                <div class="ui-box">
-                    💰 PUNTI: <span id="gameScore" style="color: #4ecdc4;">0</span>
-                </div>
-                <div class="ui-box">
-                    🏥 SALVATI: <span id="patientsSaved" style="color: #ff6b6b;">0</span>
-                </div>
+                <div class="ui-box">⏱️ <span id="gameTimer">300</span>s</div>
+                <div class="ui-box">💰 <span id="gameScore">0</span></div>
+                <div class="ui-box">🏥 <span id="patientsSaved">0</span></div>
             </div>
 
             <button class="btn btn-primary" onclick="showCharacterSelection()">
-                🔄 CAMBIA EROE
+                🔄 Cambia
             </button>
         </div>
 
         <div id="gameWorld">
-            <!-- AMBULANCE -->
             <div id="ambulance"></div>
-            
-            <!-- CITTÀ DINAMICA -->
-            <div class="city-element building" style="width: 200px; height: 300px; left: 100px; top: 150px;"></div>
-            <div class="city-element building" style="width: 180px; height: 250px; left: 350px; top: 200px;"></div>
-            <div class="city-element hospital" style="width: 250px; height: 200px; left: 600px; top: 250px;">🏥 OSPEDALE</div>
-            <div class="city-element road" style="width: 800px; height: 80px; left: 100px; top: 500px;"></div>
-            
-            <!-- SIREN EFFECT -->
-            <div class="siren-effect"></div>
-            
-            <!-- Player character e emergency events verranno aggiunti dinamicamente -->
+            <!-- Gli elementi della città e le emergenze vengono aggiunti qui -->
         </div>
     </div>
 
     <script>
-        // ==================== GAME DATA ESPANSO ====================
+        // ==================== GAME DATA ====================
         const characters = {
             cat: {
                 name: "Dott. Whiskers",
                 emoji: "🐱",
                 speed: 8,
-                precision: 9,
-                specialty: "Interventi rapidi",
-                color: "#ff9a3d",
-                ambulanceSpeed: 6
+                color: "#ff9a3d"
             },
             dog: {
                 name: "Medic Woof",
                 emoji: "🐶", 
                 speed: 6,
-                precision: 7,
-                specialty: "Trasporto pazienti",
-                color: "#4ecdc4",
-                ambulanceSpeed: 8
+                color: "#4ecdc4"
             },
             rabbit: {
                 name: "Nurse Hops",
                 emoji: "🐰",
                 speed: 9,
-                precision: 8,
-                specialty: "Procedure complesse",
-                color: "#ff6b6b",
-                ambulanceSpeed: 5
+                color: "#ff6b6b"
             }
         };
 
         const emergencies = [
             {
                 type: "cardiac_arrest",
-                name: "ARRESTO CARDIACO",
+                name: "Arresto Cardiaco",
                 emoji: "💔",
-                description: "Paziente incosciente, senza polso! Emergenza massima!",
+                description: "Paziente incosciente!",
                 tools: ["defibrillator", "oxygen_mask", "cpr"],
-                difficulty: "hard",
-                points: 150,
-                timeLimit: 30
+                points: 100
             },
             {
                 type: "bleeding", 
-                name: "EMORRAGIA ARTERIOSA",
+                name: "Emorragia",
                 emoji: "🩸",
-                description: "Sanguinamento incontrollabile! Perde sangue rapidamente!",
+                description: "Sanguinamento grave!",
                 tools: ["tourniquet", "bandage", "pressure"],
-                difficulty: "medium",
-                points: 100,
-                timeLimit: 45
+                points: 75
             },
             {
                 type: "fracture",
-                name: "FRATTURA ESPOSTA",
+                name: "Frattura",
                 emoji: "🦴",
-                description: "Osso rotto che sporge dalla pelle! Rischio infezione!",
+                description: "Osso rotto!",
                 tools: ["splint", "bandage", "pain_relief"],
-                difficulty: "easy", 
-                points: 75,
-                timeLimit: 60
-            },
-            {
-                type: "allergic_shock",
-                name: "SHOCK ANAFILATTICO",
-                emoji: "🌡️",
-                description: "Gola che si chiude! Difficoltà respiratoria estrema!",
-                tools: ["epipen", "oxygen_mask", "steroids"],
-                difficulty: "hard",
-                points: 125,
-                timeLimit: 25
-            },
-            {
-                type: "burn",
-                name: "USTIONI GRAVI",
-                emoji: "🔥",
-                description: "Ustioni di 3° grado! Pelle carbonizzata!",
-                tools: ["cool_burn", "bandage", "iv_fluids"],
-                difficulty: "medium",
-                points: 90,
-                timeLimit: 40
+                points: 50
             }
         ];
 
         const tools = {
-            defibrillator: { emoji: "⚡", name: "Defibrillatore", description: "Scossa elettrica al cuore" },
-            oxygen_mask: { emoji: "💨", name: "Ossigeno", description: "Supporto respiratorio" },
-            cpr: { emoji: "💓", name: "RCP", description: "Rianimazione cardiopolmonare" },
-            tourniquet: { emoji: "🩹", name: "Laccio", description: "Ferma emorragie" },
-            bandage: { emoji: "🩹", name: "Benda", description: "Medicazione sterile" },
-            pressure: { emoji: "✋", name: "Pressione", description: "Compressione diretta" },
-            splint: { emoji: "🦴", name: "Stecca", description: "Immobilizzazione" },
-            pain_relief: { emoji: "💊", name: "Antidolorifico", description: "Controllo del dolore" },
-            epipen: { emoji: "💉", name: "EpiPen", description: "Adrenalina per allergie" },
-            steroids: { emoji: "💊", name: "Steroidi", description: "Riduce infiammazione" },
-            cool_burn: { emoji: "💧", name: "Acqua Fredda", description: "Raffredda le ustioni" },
-            iv_fluids: { emoji: "💧", name: "Fleboclisi", description: "Idratazione endovenosa" }
+            defibrillator: { emoji: "⚡", name: "Defibrillatore" },
+            oxygen_mask: { emoji: "💨", name: "Ossigeno" },
+            cpr: { emoji: "💓", name: "RCP" },
+            tourniquet: { emoji: "🩹", name: "Laccio" },
+            bandage: { emoji: "🩹", name: "Benda" },
+            pressure: { emoji: "✋", name: "Pressione" },
+            splint: { emoji: "🦴", name: "Stecca" },
+            pain_relief: { emoji: "💊", name: "Antidolorifico" }
         };
 
         // ==================== GAME STATE ====================
@@ -621,8 +446,7 @@
             ambulancePosition: { x: 100, y: 100 },
             currentEmergency: null,
             gameInterval: null,
-            isInAmbulance: false,
-            currentLevel: 1
+            isInAmbulance: false
         };
 
         // ==================== DOM ELEMENTS ====================
@@ -641,39 +465,52 @@
 
         // ==================== CHARACTER SELECTION ====================
         function selectCharacter(characterId) {
+            // Rimuovi selezione da tutte le carte
             document.querySelectorAll('.character-card').forEach(card => {
                 card.classList.remove('selected');
             });
 
+            // Aggiungi selezione alla carta cliccata
             event.currentTarget.classList.add('selected');
+            
+            // Abilita il pulsante di inizio
             elements.startGameBtn.disabled = false;
             gameState.currentCharacter = characterId;
         }
 
         function startGame() {
-            if (!gameState.currentCharacter) return;
+            if (!gameState.currentCharacter) {
+                alert("Seleziona prima un personaggio!");
+                return;
+            }
 
+            // Cambia schermata
             elements.characterSelection.classList.remove('active');
             elements.characterSelection.classList.add('hidden');
             elements.gameScreen.classList.remove('hidden');
             elements.gameScreen.classList.add('active');
 
+            // Aggiorna UI con informazioni del personaggio
             const character = characters[gameState.currentCharacter];
             elements.currentCharacterEmoji.textContent = character.emoji;
             elements.currentCharacterName.textContent = character.name;
 
+            // Inizializza il gioco
             initializeGame();
         }
 
         function showCharacterSelection() {
+            // Torna alla selezione personaggi
             elements.gameScreen.classList.remove('active');
             elements.gameScreen.classList.add('hidden');
             elements.characterSelection.classList.remove('hidden');
             elements.characterSelection.classList.add('active');
+
+            // Ferma il gioco
             stopGame();
         }
 
-        // ==================== GAME ENGINE RIVOLUZIONATO ====================
+        // ==================== GAME ENGINE ====================
         function initializeGame() {
             gameState.score = 0;
             gameState.timeLeft = 300;
@@ -681,55 +518,19 @@
             gameState.gameActive = true;
             gameState.playerPosition = { x: 400, y: 300 };
             gameState.ambulancePosition = { x: 100, y: 100 };
-            gameState.isInAmbulance = false;
 
             updateUI();
             createPlayerCharacter();
             positionAmbulance();
+            createCity();
             spawnEmergencies();
             startGameTimer();
-            createCity();
         }
 
         function stopGame() {
             gameState.gameActive = false;
             clearInterval(gameState.gameInterval);
-            elements.gameWorld.innerHTML = '';
-            // Ricrea elementi base
-            elements.gameWorld.innerHTML = '<div id="ambulance"></div><div class="siren-effect"></div>';
-        }
-
-        function createCity() {
-            // Aggiungi più edifici
-            const buildings = [
-                { width: 200, height: 300, left: 100, top: 150, type: 'building' },
-                { width: 180, height: 250, left: 350, top: 200, type: 'building' },
-                { width: 220, height: 280, left: 800, top: 180, type: 'building' },
-                { width: 250, height: 200, left: 600, top: 250, type: 'hospital' },
-                { width: 800, height: 80, left: 100, top: 500, type: 'road' },
-                { width: 80, height: 400, left: 900, top: 300, type: 'road' }
-            ];
-
-            buildings.forEach(building => {
-                const element = document.createElement('div');
-                element.className = `city-element ${building.type}`;
-                element.style.width = building.width + 'px';
-                element.style.height = building.height + 'px';
-                element.style.left = building.left + 'px';
-                element.style.top = building.top + 'px';
-                
-                if (building.type === 'hospital') {
-                    element.innerHTML = '🏥 OSPEDALE';
-                    element.style.color = 'white';
-                    element.style.display = 'flex';
-                    element.style.alignItems = 'center';
-                    element.style.justifyContent = 'center';
-                    element.style.fontWeight = 'bold';
-                    element.style.fontSize = '1.2rem';
-                }
-                
-                elements.gameWorld.appendChild(element);
-            });
+            elements.gameWorld.innerHTML = '<div id="ambulance"></div>';
         }
 
         function createPlayerCharacter() {
@@ -749,16 +550,48 @@
             elements.ambulance.style.top = gameState.ambulancePosition.y + 'px';
         }
 
+        function createCity() {
+            // Aggiungi edifici
+            const buildings = [
+                { type: 'building', width: 150, height: 200, left: 50, top: 100 },
+                { type: 'building', width: 120, height: 180, left: 250, top: 120 },
+                { type: 'hospital', width: 180, height: 150, left: 500, top: 150 },
+                { type: 'road', width: 600, height: 60, left: 50, top: 400 },
+                { type: 'road', width: 60, height: 300, left: 650, top: 200 }
+            ];
+
+            buildings.forEach(building => {
+                const element = document.createElement('div');
+                element.className = `city-element ${building.type}`;
+                element.style.width = building.width + 'px';
+                element.style.height = building.height + 'px';
+                element.style.left = building.left + 'px';
+                element.style.top = building.top + 'px';
+                
+                if (building.type === 'hospital') {
+                    element.innerHTML = '🏥';
+                    element.style.display = 'flex';
+                    element.style.alignItems = 'center';
+                    element.style.justifyContent = 'center';
+                    element.style.fontSize = '2rem';
+                }
+                
+                elements.gameWorld.appendChild(element);
+            });
+        }
+
         function spawnEmergencies() {
+            // Rimuovi emergenze esistenti
             document.querySelectorAll('.emergency-event').forEach(event => event.remove());
 
-            for (let i = 0; i < 4; i++) {
+            // Genera 3 emergenze casuali
+            for (let i = 0; i < 3; i++) {
                 setTimeout(() => {
                     if (!gameState.gameActive) return;
                     
                     const emergency = emergencies[Math.floor(Math.random() * emergencies.length)];
                     spawnEmergency(emergency);
-                }, i * 8000);
+                }, i * 10000);
             }
         }
 
@@ -766,14 +599,14 @@
             const eventElement = document.createElement('div');
             eventElement.className = 'emergency-event';
             eventElement.innerHTML = `
-                <div style="font-size: 3rem; margin-bottom: 10px;">${emergency.emoji}</div>
-                <div style="font-weight: bold; font-size: 1.2rem; margin-bottom: 5px;">${emergency.name}</div>
-                <div style="font-size: 0.9rem;">${emergency.description}</div>
-                <div style="margin-top: 10px; font-size: 0.8rem; color: #ffd93d;">⏱️ ${emergency.timeLimit}s</div>
+                <div style="font-size: 2rem;">${emergency.emoji}</div>
+                <div style="font-weight: bold;">${emergency.name}</div>
+                <div style="font-size: 0.8rem;">${emergency.description}</div>
             `;
 
-            const x = 150 + Math.random() * (window.innerWidth - 400);
-            const y = 150 + Math.random() * (window.innerHeight - 400);
+            // Posizione casuale
+            const x = 100 + Math.random() * (window.innerWidth - 300);
+            const y = 100 + Math.random() * (window.innerHeight - 300);
             
             eventElement.style.left = x + 'px';
             eventElement.style.top = y + 'px';
@@ -783,10 +616,10 @@
 
             elements.gameWorld.appendChild(eventElement);
 
+            // Rimuovi dopo 30 secondi se non trattata
             setTimeout(() => {
                 if (eventElement.parentElement) {
                     eventElement.remove();
-                    showMessage("⏰ EMERGENZA CRITICA! Paziente non trattato in tempo!", "error");
                 }
             }, 30000);
         }
@@ -797,24 +630,22 @@
             const minigame = document.createElement('div');
             minigame.id = 'actionMinigame';
             minigame.innerHTML = `
-                <h2 style="color: #ff6b6b; margin-bottom: 10px;">${emergency.emoji} ${emergency.name}</h2>
-                <p style="margin-bottom: 20px; font-size: 1.1rem;">${emergency.description}</p>
-                <p style="color: #4ecdc4; margin: 20px 0; font-size: 1.2rem;">Scegli lo strumento corretto:</p>
+                <h2>${emergency.emoji} ${emergency.name}</h2>
+                <p>${emergency.description}</p>
+                <p style="color: #4ecdc4; margin: 10px 0;">Scegli lo strumento corretto:</p>
                 
                 <div class="minigame-tools">
                     ${emergency.tools.map(tool => `
-                        <button class="minigame-tool" onclick="useTool('${tool}')" title="${tools[tool].description}">
+                        <button class="minigame-tool" onclick="useTool('${tool}')">
                             ${tools[tool].emoji}<br>
-                            <small style="font-size: 0.9rem;">${tools[tool].name}</small>
+                            <small>${tools[tool].name}</small>
                         </button>
                     `).join('')}
                 </div>
                 
-                <div style="margin-top: 25px;">
-                    <button class="btn btn-primary" onclick="closeMinigame()">
-                        ❌ ABBANDONA EMERGENZA
-                    </button>
-                </div>
+                <button class="btn" onclick="closeMinigame()" style="margin-top: 10px;">
+                    ❌ Annulla
+                </button>
             `;
 
             elements.gameWorld.appendChild(minigame);
@@ -822,26 +653,128 @@
 
         function useTool(toolId) {
             const emergency = gameState.currentEmergency;
-            const correctTool = emergency.tools[0];
+            const correctTool = emergency.tools[0]; // Primo strumento è sempre corretto
             
             if (toolId === correctTool) {
+                // SUCCESSO
                 gameState.score += emergency.points;
                 gameState.patientsSaved++;
+                showMessage(`✅ Successo! +${emergency.points} punti`, "success");
                 
-                // EFFETTO SUCCESSO ESPLOSIVO
-                showMessage(`🎉 MISSIONE COMPIUTA! ${emergency.name} risolta! +${emergency.points} punti!`, "success");
-                
-                // Rimuovi l'emergenza
+                // Rimuovi l'evento di emergenza
                 document.querySelectorAll('.emergency-event').forEach(event => {
                     if (event.dataset.emergencyType === emergency.type) {
-                        event.style.animation = 'emergencyPulse 0.5s forwards';
-                        setTimeout(() => event.remove(), 500);
+                        event.remove();
                     }
                 });
-                
-                // Aggiungi tempo bonus
-                gameState.timeLeft += 15;
-                
             } else {
+                // FALLIMENTO
                 gameState.timeLeft = Math.max(30, gameState.timeLeft - 30);
-                showMessage(`💥 ERRORE! Strumento sbagliato! -30 secondi
+                showMessage(`❌ Strumento sbagliato! -30s`, "error");
+            }
+
+            closeMinigame();
+            updateUI();
+        }
+
+        function closeMinigame() {
+            const minigame = document.getElementById('actionMinigame');
+            if (minigame) minigame.remove();
+            gameState.currentEmergency = null;
+        }
+
+        function showMessage(text, type) {
+            const message = document.createElement('div');
+            message.className = `game-message message-${type}`;
+            message.textContent = text;
+            
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.remove();
+            }, 2000);
+        }
+
+        // ==================== GAME TIMER ====================
+        function startGameTimer() {
+            gameState.gameInterval = setInterval(() => {
+                if (!gameState.gameActive) return;
+                
+                gameState.timeLeft--;
+                updateUI();
+                
+                if (gameState.timeLeft <= 0) {
+                    endGame();
+                }
+                
+                // Genera occasionalmente nuove emergenze
+                if (Math.random() < 0.01 && document.querySelectorAll('.emergency-event').length < 5) {
+                    const emergency = emergencies[Math.floor(Math.random() * emergencies.length)];
+                    spawnEmergency(emergency);
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            gameState.gameActive = false;
+            clearInterval(gameState.gameInterval);
+            
+            showMessage(`🎮 GAME OVER! Punteggio: ${gameState.score}`, "success");
+            
+            setTimeout(() => {
+                showCharacterSelection();
+            }, 3000);
+        }
+
+        function updateUI() {
+            elements.gameTimer.textContent = gameState.timeLeft;
+            elements.gameScore.textContent = gameState.score;
+            elements.patientsSaved.textContent = gameState.patientsSaved;
+        }
+
+        // ==================== MOVIMENTO ====================
+        document.addEventListener('keydown', (e) => {
+            if (!gameState.gameActive) return;
+            
+            const player = document.getElementById('player');
+            if (!player) return;
+            
+            const speed = characters[gameState.currentCharacter].speed;
+            let newX = gameState.playerPosition.x;
+            let newY = gameState.playerPosition.y;
+            
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                case 'arrowup':
+                    newY -= speed;
+                    break;
+                case 's':
+                case 'arrowdown':
+                    newY += speed;
+                    break;
+                case 'a':
+                case 'arrowleft':
+                    newX -= speed;
+                    break;
+                case 'd':
+                case 'arrowright':
+                    newX += speed;
+                    break;
+            }
+            
+            // Controllo dei bordi
+            newX = Math.max(20, Math.min(window.innerWidth - 80, newX));
+            newY = Math.max(20, Math.min(window.innerHeight - 80, newY));
+            
+            gameState.playerPosition.x = newX;
+            gameState.playerPosition.y = newY;
+            
+            player.style.left = newX + 'px';
+            player.style.top = newY + 'px';
+        });
+
+        // ==================== INIZIALIZZAZIONE ====================
+        console.log('🐾 ANIMAL ER - Gioco caricato!');
+    </script>
+</body>
+</html>
